@@ -17,8 +17,8 @@ document.getElementById('body').addEventListener('click', (e) => {
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
     // Return it as a Promise
-    return new Promise(function(resolve, reject) {
-        xmlHttp.onreadystatechange = function() {
+    return new Promise(function (resolve, reject) {
+        xmlHttp.onreadystatechange = function () {
             // Only run if the request is complete
             if (xmlHttp.readyState !== 4) {
                 return;
@@ -53,6 +53,7 @@ function handleError(event) {
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
     document.getElementById('error').classList.remove('hide');
+    throw Error(event.body.message);
 }
 
 function setQueryResult(result) {
@@ -66,6 +67,7 @@ function setQueryResult(result) {
 
 async function runQueryByID() {
     let queryStringParams = '?';
+    // TODO update to use a POST
     for (let [key, value] of Object.entries(queryParams)) {
         queryStringParams += `${key}=${value}&`;
     }
@@ -84,12 +86,16 @@ async function runQueryByID() {
 function parseQueryParams() {
     const url = location.search;
     const query = url.substr(1);
-    const result = {};
+    const result = {global: {}, templateFields: {}};
     query.split('&').forEach((param) => {
         const item = param.split('=');
-        const isParameterAllowed = checkIfParameterAllowed(item);
-        if (isParameterAllowed) {
-            result[item[0]] = decodeURIComponent(item[1]);
+        const parameter = getParameter(item);
+        if (parameter) {
+            if (parameter.type === 'global') {
+                result.global[parameter.key] = decodeURIComponent(parameter.value);
+            } else if (parameter.type === 'templateField') {
+                result.templateFields[parameter.key] = decodeURIComponent(parameter.value);
+            }
         }
     });
     queryParams = result;
@@ -98,9 +104,8 @@ function parseQueryParams() {
 /**
  * check if the query-param  is allowed
  * @param item
- * @returns {boolean}
  */
-function checkIfParameterAllowed(item) {
+function getParameter(item) {
     const allowedParams = {
         oneOf: [
             'sourceKey',
@@ -113,20 +118,42 @@ function checkIfParameterAllowed(item) {
             'param_string_'
         ]
     };
-    return allowedParams.oneOf.includes(item[0]) ||
-        allowedParams.startWith.some((prefix) => item[0].startsWith(prefix));
+    if (allowedParams.oneOf.includes(item[0])) {
+        return {key: item[0], value: item[1], type: 'global'};
+    } else {
+        const prefix = allowedParams.startWith.find((prefix) => item[0].startsWith(prefix));
+        switch (prefix) {
+            case  'param_number_':
+                return {key: item[0].replace('param_number_', ''), value: +item[1], type: 'templateField'};
+            case  'param_ids_':
+                return {key: item[0].replace('param_ids_', ''), value: item[1], type: 'templateField'};
+            case  'param_string_':
+                return {key: item[0].replace('param_string_', ''), value: item[1], type: 'templateField'};
+            default:
+                return false;
+        }
+    }
 }
 
-function validateQueryParams() {
-    if (queryParams.queryId === undefined) {
-        handleError({body: {message: 'Missing URL parameter “query_id”'}});
-    } else if (!Number.isInteger(+queryParams.queryId)) {
-        handleError({body: {message: 'URL parameter “query_id” must be a number'}});
-    } else if (queryParams.sourceKey === undefined) {
-        handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
-    } else if (queryParams.sourceKey === undefined) {
-        handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
+function validateQueryParams(query) {
+    if (queryParams.global.queryId === undefined) {
+        return handleError({body: {message: 'Missing URL parameter “query_id”'}});
+    } else if (!Number.isInteger(+queryParams.global.queryId)) {
+        return handleError({body: {message: 'URL parameter “query_id” must be a number'}});
+    } else if (queryParams.global.sourceKey === undefined) {
+        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
+    } else if (query.templateFields && query.templateFields.length > 0) {
+        query.templateFields.forEach(template => {
+            if (queryParams.templateFields.hasOwnProperty(template.key)) {
+                if (template.type === 'number' && isNaN(+queryParams.templateFields[template.key])) {
+                    return handleError({body: {message: `Invalid URL parameter “${template.key}” (it must be a number)`}});
+                }
+            } else {
+                return handleError({body: {message: `Missing URL parameter “${template.key}”`}});
+            }
+        });
     }
+    return true;
 }
 
 function setSchema(result) {
@@ -140,7 +167,7 @@ function setSchema(result) {
 async function getSchema() {
     const result = await makeRequest(
         'GET',
-        `/api/plugins/table/getSchema?sourceKey=${queryParams.sourceKey}`,
+        `/api/plugins/table/getSchema?sourceKey=${queryParams.global.sourceKey}`,
         null
     );
     setSchema(JSON.parse(result.response));
@@ -154,8 +181,7 @@ async function validatePluginConfiguration() {
             {results: schema}
         );
         return true;
-    } catch(e) {
-        console.log(e);
+    } catch (e) {
         handleError(e);
     }
 }
@@ -330,7 +356,7 @@ function fillDataTable() {
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
         columns: tableStructure,
-        rowClick: function(e, row) { //trigger an alert message when the row is clicked
+        rowClick: function (e, row) { //trigger an alert message when the row is clicked
             alert('Row ' + row.getData().id + ' Clicked!!!!');
         }
     });
@@ -338,11 +364,26 @@ function fillDataTable() {
     addDownloadCSVButton();
 }
 
+async function getQuery() {
+    try {
+        return await makeRequest(
+            'POST',
+            `/api/plugins/table/getQuery`,
+            {
+                id: queryParams.global.queryId,
+                sourceKey: queryParams.global.sourceKey
+            }
+        );
+    } catch (e) {
+        handleError(e);
+    }
+}
+
 async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
-
-    // validateQueryParams();
+    const query = JSON.parse((await getQuery()).response).body;
+    validateQueryParams(query);
     await getSchema();
     const isConfigurationValid = await validatePluginConfiguration();
     if (isConfigurationValid) {

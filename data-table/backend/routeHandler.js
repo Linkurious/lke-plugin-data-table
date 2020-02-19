@@ -34,6 +34,17 @@ module.exports = function configureRoutes(options) {
         }
     });
 
+    options.router.post('/getQuery', async (req, res) => {
+        const getQueryParams = {
+            id: +req.body.id,
+            sourceKey: req.body.sourceKey
+        };
+        const query = await options.getRestClient(req).graphQuery.getQuery(getQueryParams);
+        res.status(200);
+        res.contentType('application/json');
+        res.send(JSON.stringify(query));
+    });
+
     options.router.get('/runQueryByIDPlugin', async (req, res) => {
         const data = {
             id: +req.query.queryId,
