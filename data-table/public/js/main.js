@@ -29,7 +29,6 @@ function makeRequest(verb = 'GET', url, body) {
                 resolve(xmlHttp);
             } else {
                 // If failed
-                console.log(JSON.parse(xmlHttp.response));
                 reject({
                     status: xmlHttp.status,
                     statusText: xmlHttp.statusText,
@@ -48,7 +47,6 @@ function makeRequest(verb = 'GET', url, body) {
  * @param event
  */
 function handleError(event) {
-    console.log(event);
     document.getElementById('error_description').innerText = event.body.message;
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
@@ -57,7 +55,6 @@ function handleError(event) {
 }
 
 function setQueryResult(result) {
-    console.log(result);
     if (result.status === 200) {
         queryResult = result.body;
     } else {
@@ -65,17 +62,11 @@ function setQueryResult(result) {
     }
 }
 
-async function runQueryByID() {
-    let queryStringParams = '?';
-    // TODO update to use a POST
-    for (let [key, value] of Object.entries(queryParams)) {
-        queryStringParams += `${key}=${value}&`;
-    }
-    loaderElement.classList.add('active');
+async function runQueryByID(query) {
     const result = await makeRequest(
-        'GET',
-        `/api/plugins/table/runQueryByIDPlugin${queryStringParams}`,
-        null
+        'POST',
+        `/api/plugins/table/runQueryByIDPlugin`,
+        {query, queryParams}
     );
     setQueryResult(JSON.parse(result.response));
 }
@@ -151,6 +142,7 @@ function validateQueryParams(query) {
             } else {
                 return handleError({body: {message: `Missing URL parameter “${template.key}”`}});
             }
+
         });
     }
     return true;
@@ -199,7 +191,6 @@ function truncateText(text, maxLength = 50) {
 }
 
 function getFilteredSchema(schemaStructure) {
-    console.log(schemaStructure);
     if (queryResult.nodes.length > 0) {
         return schemaStructure.filter(result => {
             return queryResult.nodes[0].data.categories.includes(result.itemType);
@@ -237,7 +228,6 @@ function getTooltipsHeader(column) {
 }
 
 function setTableTitle() {
-    console.log(queryResult);
     document.getElementById('table_title').innerText = (queryResult.nodes.length > 0) ?
         `List of properties (Categories: ${queryResult.nodes[0].data.categories}):` :
         `List of properties (type: ${queryResult.edges[0].data.type}):`;
@@ -339,9 +329,6 @@ function fillDataTable() {
     setTableTitle();
     tableStructure = getTableStructure(schema);
     const tableData = getTableData({...queryResult});
-    console.log(tableData);
-    console.log(tableStructure);
-    console.log(queryResult);
 
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
@@ -387,11 +374,10 @@ async function main() {
     await getSchema();
     const isConfigurationValid = await validatePluginConfiguration();
     if (isConfigurationValid) {
-        await runQueryByID();
+        await runQueryByID(query);
         fillDataTable();
     }
 
 }
 
-// runQueryByID();
 main();

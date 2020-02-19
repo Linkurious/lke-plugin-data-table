@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5952cbfa-7421-405e-857e-b0cc8ec636f6" name="Default Changelist" comment="add data-table plugin">
+    <list default="true" id="5952cbfa-7421-405e-857e-b0cc8ec636f6" name="Default Changelist" comment="validate query template fields">
       <change beforePath="$PROJECT_DIR$/data-table/backend/routeHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/backend/routeHandler.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-table/public/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/public/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-table/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/public/index.html" afterDir="false" />
@@ -21,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="383" column="23" selection-start-line="383" selection-start-column="23" selection-end-line="383" selection-end-column="23" />
+            <state relative-caret-position="414">
+              <caret line="330" column="53" selection-start-line="330" selection-start-column="53" selection-end-line="330" selection-end-column="53" />
               <folding>
                 <element signature="e#225#339#0" />
                 <element signature="n#!!doc;n#makeRequest#0" />
@@ -38,73 +38,60 @@
                 <element signature="n#!!block;n#setQueryResult#0" />
                 <element signature="e#1738#1774#0" />
                 <element signature="e#1780#1810#0" />
-                <element signature="n#!!block;n#runQueryByID#0" />
-                <element signature="e#1964#2014#0" />
                 <element signature="n#!!doc;n#parseQueryParams#0" />
-                <element signature="n#!!block;n#parseQueryParams#0" />
-                <element signature="e#2489#2862#0" />
-                <element signature="e#2587#2858#0" />
-                <element signature="e#2628#2713#0" />
-                <element signature="e#2759#2852#0" />
                 <element signature="n#!!doc;n#getParameter#0" />
-                <element signature="n#!!block;n#getParameter#0" />
-                <element signature="e#3009#3172#0" />
-                <element signature="e#3022#3079#0" />
-                <element signature="e#3096#3168#0" />
-                <element signature="e#3219#3283#0" />
-                <element signature="e#3289#3827#0" />
-                <element signature="e#3384#3823#0" />
-                <element signature="e#3408#3530#0" />
-                <element signature="e#3537#3652#0" />
-                <element signature="e#3659#3780#0" />
-                <element signature="e#3787#3817#0" />
+                <element signature="e#2814#2871#0" />
+                <element signature="e#2888#2960#0" />
+                <element signature="e#3176#3615#0" />
+                <element signature="e#3200#3322#0" />
+                <element signature="e#3329#3444#0" />
+                <element signature="e#3451#3572#0" />
+                <element signature="e#3579#3609#0" />
                 <element signature="n#!!block;n#setSchema#0" />
-                <element signature="e#4915#4954#0" />
-                <element signature="e#4960#4990#0" />
+                <element signature="e#4708#4747#0" />
+                <element signature="e#4753#4783#0" />
                 <element signature="n#!!block;n#getSchema#0" />
                 <element signature="n#!!block;n#validatePluginConfiguration#0" />
-                <element signature="e#5260#5404#0" />
-                <element signature="e#5414#5439#0" />
+                <element signature="e#5053#5197#0" />
+                <element signature="e#5207#5232#0" />
                 <element signature="n#!!block;n#truncateColumnTitle#0" />
                 <element signature="n#!!block;n#truncateText#0" />
-                <element signature="e#5600#5654#0" />
-                <element signature="e#5660#5682#0" />
+                <element signature="e#5393#5447#0" />
+                <element signature="e#5453#5475#0" />
                 <element signature="n#!!block;n#getFilteredSchema#0" />
-                <element signature="e#5800#5936#0" />
-                <element signature="e#5846#5930#0" />
-                <element signature="e#5942#6066#0" />
-                <element signature="e#5988#6060#0" />
+                <element signature="e#5593#5729#0" />
+                <element signature="e#5639#5723#0" />
+                <element signature="e#5735#5859#0" />
+                <element signature="e#5781#5853#0" />
                 <element signature="n#!!block;n#getTableStructure#0" />
-                <element signature="e#6246#6404#0" />
-                <element signature="e#6259#6399#0" />
+                <element signature="e#6039#6197#0" />
+                <element signature="e#6052#6192#0" />
                 <element signature="n#!!block;n#getTableData#0" />
-                <element signature="e#6597#6659#0" />
+                <element signature="e#6390#6452#0" />
                 <element signature="n#!!block;n#getTooltipsHeader#0" />
                 <element signature="n#!!block;n#setTableTitle#0" />
                 <element signature="n#!!block;n#updateFilter#0" />
                 <element signature="n#!!block;n#clearFilter#0" />
                 <element signature="n#!!block;n#switchShowCheckbox#0" />
-                <element signature="e#7862#7942#0" />
-                <element signature="e#7948#8028#0" />
+                <element signature="e#7655#7735#0" />
+                <element signature="e#7741#7821#0" />
                 <element signature="n#!!block;n#preventPropagation#0" />
                 <element signature="n#!!block;n#filterTableColumns#0" />
-                <element signature="e#8171#8211#0" />
-                <element signature="e#8217#8257#0" />
+                <element signature="e#7964#8004#0" />
+                <element signature="e#8010#8050#0" />
                 <element signature="n#!!block;n#addFilter#0" />
-                <element signature="e#8303#10183#0" />
-                <element signature="e#8706#9317#0" />
-                <element signature="e#9494#9720#0" />
+                <element signature="e#8096#9976#0" />
+                <element signature="e#8499#9110#0" />
+                <element signature="e#9287#9513#0" />
                 <element signature="n#!!block;n#addDownloadCSVButton#0" />
-                <element signature="e#10247#10468#0" />
-                <element signature="e#10414#10462#0" />
-                <element signature="n#!!block;n#fillDataTable#0" />
-                <element signature="e#10847#11410#0" />
-                <element signature="e#11291#11406#0" />
+                <element signature="e#10040#10261#0" />
+                <element signature="e#10207#10255#0" />
+                <element signature="e#10640#11203#0" />
+                <element signature="e#11084#11199#0" />
                 <element signature="n#!!block;n#getQuery#0" />
-                <element signature="e#11491#11688#0" />
-                <element signature="e#11580#11677#0" />
-                <element signature="e#11698#11723#0" />
-                <element signature="e#12052#12104#0" />
+                <element signature="e#11284#11481#0" />
+                <element signature="e#11373#11470#0" />
+                <element signature="e#11491#11516#0" />
               </folding>
             </state>
           </provider>
@@ -113,13 +100,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1702">
-              <caret line="74" selection-start-line="74" selection-end-line="74" />
+            <state relative-caret-position="1932">
+              <caret line="84" selection-start-line="84" selection-end-line="84" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>console</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -192,6 +184,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -220,23 +213,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1582124343445</updated>
-      <workItem from="1582124344881" duration="1217000" />
+      <workItem from="1582124344881" duration="1950000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1217000" />
+    <option name="totallyTimeSpent" value="1950000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1200" height="1920" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24936387" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24936387" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" weight="0.32988003" />
-      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.32988003" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32988003" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -255,20 +248,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add data-table plugin" />
-    <option name="LAST_COMMIT_MESSAGE" value="add data-table plugin" />
+    <MESSAGE value="validate query template fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="validate query template fields" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1702">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
+        <state relative-caret-position="1932">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="383" column="23" selection-start-line="383" selection-start-column="23" selection-end-line="383" selection-end-column="23" />
+        <state relative-caret-position="414">
+          <caret line="330" column="53" selection-start-line="330" selection-start-column="53" selection-end-line="330" selection-end-column="53" />
           <folding>
             <element signature="e#225#339#0" />
             <element signature="n#!!doc;n#makeRequest#0" />
@@ -284,73 +278,60 @@
             <element signature="n#!!block;n#setQueryResult#0" />
             <element signature="e#1738#1774#0" />
             <element signature="e#1780#1810#0" />
-            <element signature="n#!!block;n#runQueryByID#0" />
-            <element signature="e#1964#2014#0" />
             <element signature="n#!!doc;n#parseQueryParams#0" />
-            <element signature="n#!!block;n#parseQueryParams#0" />
-            <element signature="e#2489#2862#0" />
-            <element signature="e#2587#2858#0" />
-            <element signature="e#2628#2713#0" />
-            <element signature="e#2759#2852#0" />
             <element signature="n#!!doc;n#getParameter#0" />
-            <element signature="n#!!block;n#getParameter#0" />
-            <element signature="e#3009#3172#0" />
-            <element signature="e#3022#3079#0" />
-            <element signature="e#3096#3168#0" />
-            <element signature="e#3219#3283#0" />
-            <element signature="e#3289#3827#0" />
-            <element signature="e#3384#3823#0" />
-            <element signature="e#3408#3530#0" />
-            <element signature="e#3537#3652#0" />
-            <element signature="e#3659#3780#0" />
-            <element signature="e#3787#3817#0" />
+            <element signature="e#2814#2871#0" />
+            <element signature="e#2888#2960#0" />
+            <element signature="e#3176#3615#0" />
+            <element signature="e#3200#3322#0" />
+            <element signature="e#3329#3444#0" />
+            <element signature="e#3451#3572#0" />
+            <element signature="e#3579#3609#0" />
             <element signature="n#!!block;n#setSchema#0" />
-            <element signature="e#4915#4954#0" />
-            <element signature="e#4960#4990#0" />
+            <element signature="e#4708#4747#0" />
+            <element signature="e#4753#4783#0" />
             <element signature="n#!!block;n#getSchema#0" />
             <element signature="n#!!block;n#validatePluginConfiguration#0" />
-            <element signature="e#5260#5404#0" />
-            <element signature="e#5414#5439#0" />
+            <element signature="e#5053#5197#0" />
+            <element signature="e#5207#5232#0" />
             <element signature="n#!!block;n#truncateColumnTitle#0" />
             <element signature="n#!!block;n#truncateText#0" />
-            <element signature="e#5600#5654#0" />
-            <element signature="e#5660#5682#0" />
+            <element signature="e#5393#5447#0" />
+            <element signature="e#5453#5475#0" />
             <element signature="n#!!block;n#getFilteredSchema#0" />
-            <element signature="e#5800#5936#0" />
-            <element signature="e#5846#5930#0" />
-            <element signature="e#5942#6066#0" />
-            <element signature="e#5988#6060#0" />
+            <element signature="e#5593#5729#0" />
+            <element signature="e#5639#5723#0" />
+            <element signature="e#5735#5859#0" />
+            <element signature="e#5781#5853#0" />
             <element signature="n#!!block;n#getTableStructure#0" />
-            <element signature="e#6246#6404#0" />
-            <element signature="e#6259#6399#0" />
+            <element signature="e#6039#6197#0" />
+            <element signature="e#6052#6192#0" />
             <element signature="n#!!block;n#getTableData#0" />
-            <element signature="e#6597#6659#0" />
+            <element signature="e#6390#6452#0" />
             <element signature="n#!!block;n#getTooltipsHeader#0" />
             <element signature="n#!!block;n#setTableTitle#0" />
             <element signature="n#!!block;n#updateFilter#0" />
             <element signature="n#!!block;n#clearFilter#0" />
             <element signature="n#!!block;n#switchShowCheckbox#0" />
-            <element signature="e#7862#7942#0" />
-            <element signature="e#7948#8028#0" />
+            <element signature="e#7655#7735#0" />
+            <element signature="e#7741#7821#0" />
             <element signature="n#!!block;n#preventPropagation#0" />
             <element signature="n#!!block;n#filterTableColumns#0" />
-            <element signature="e#8171#8211#0" />
-            <element signature="e#8217#8257#0" />
+            <element signature="e#7964#8004#0" />
+            <element signature="e#8010#8050#0" />
             <element signature="n#!!block;n#addFilter#0" />
-            <element signature="e#8303#10183#0" />
-            <element signature="e#8706#9317#0" />
-            <element signature="e#9494#9720#0" />
+            <element signature="e#8096#9976#0" />
+            <element signature="e#8499#9110#0" />
+            <element signature="e#9287#9513#0" />
             <element signature="n#!!block;n#addDownloadCSVButton#0" />
-            <element signature="e#10247#10468#0" />
-            <element signature="e#10414#10462#0" />
-            <element signature="n#!!block;n#fillDataTable#0" />
-            <element signature="e#10847#11410#0" />
-            <element signature="e#11291#11406#0" />
+            <element signature="e#10040#10261#0" />
+            <element signature="e#10207#10255#0" />
+            <element signature="e#10640#11203#0" />
+            <element signature="e#11084#11199#0" />
             <element signature="n#!!block;n#getQuery#0" />
-            <element signature="e#11491#11688#0" />
-            <element signature="e#11580#11677#0" />
-            <element signature="e#11698#11723#0" />
-            <element signature="e#12052#12104#0" />
+            <element signature="e#11284#11481#0" />
+            <element signature="e#11373#11470#0" />
+            <element signature="e#11491#11516#0" />
           </folding>
         </state>
       </provider>

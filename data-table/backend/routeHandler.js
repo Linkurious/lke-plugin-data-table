@@ -4,6 +4,17 @@ const bodyParser = require('body-parser');
 module.exports = function configureRoutes(options) {
     options.router.use(bodyParser.json());
 
+    function sanitizeTemplateData(templateFields) {
+        if (templateFields) {
+            if (templateFields.hasOwnProperty('nodeset')) {
+                templateFields['nodeset'] = templateFields['nodeset'].split(',');
+            } else if (templateFields.hasOwnProperty('edgeset')) {
+                templateFields['edgeset'] = templateFields['edgeset'].split(',');
+            }
+        }
+        return templateFields;
+    }
+
     function checkPluginsConfiguration(schemaTypes, entityType, itemType, properties) {
         if (entityType && entityType !== 'node' && entityType !== 'edge') {
             return {message: 'Invalid plugin configuration “entityType” (must be “node” or “edge”)'};
@@ -45,20 +56,19 @@ module.exports = function configureRoutes(options) {
         res.send(JSON.stringify(query));
     });
 
-    options.router.get('/runQueryByIDPlugin', async (req, res) => {
+    options.router.post('/runQueryByIDPlugin', async (req, res) => {
         const data = {
-            id: +req.query.queryId,
-            sourceKey: req.query.sourceKey,
-            limit: +req.query.limit
+            id: +req.body.queryParams.global.queryId,
+            sourceKey: req.body.queryParams.global.sourceKey,
+            limit: +req.body.queryParams.global.limit
         };
-        try {
-            const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
-            res.status(200);
-            res.contentType('application/json');
-            res.send(JSON.stringify(queryResult));
-        } catch(e) {
-            console.log(e);
+        if (req.body.query.templateFields) {
+            data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields);
         }
+        const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
+        res.status(200);
+        res.contentType('application/json');
+        res.send(JSON.stringify(queryResult));
     });
 
     options.router.get('/getSchema', async (req, res) => {
