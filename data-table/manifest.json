@@ -1,0 +1,11 @@
+{
+  "name": "table",
+  "version": "0.2.1",
+  "linkuriousVersion": "2.9.0",
+  "pluginApiVersion": "1.0.0",
+  "publicRoute": "public",
+  "singlePageAppIndex": "index.html",
+  "backendFiles": [
+    "backend/routeHandler.js"
+  ]
+}
