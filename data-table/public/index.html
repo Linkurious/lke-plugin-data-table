@@ -41,60 +41,37 @@
         <div id="item_type" class="table--item_type"></div>
         <div id="item_count" class="table--item_count"></div>
         <div class="button__container">
-            <button class="btn__edit-column hide" id="button-edit">EDIT COLUMNS</button>
-            <button class="btn__export-csv hide" id="button-export">EXPORT CSV</button>
+            <button class="btn btn__secondary hide" id="button-edit">EDIT COLUMNS</button>
+            <button class="btn btn__primary hide" id="button-export">EXPORT CSV</button>
         </div>
-
-        <!--------------------Table action-------------------->
-        <!--<div id="table_filter" class="table&#45;&#45;filter hide">
-
-          <div id="filter_select-columns" class=" multi-select">
-            <div class="selectBox" id="columns_select">
-              <select id="filter&#45;&#45;select_columns" class="npt__select">
-                <option>Select Columns to show</option>
-              </select>
-              <div class="overSelect"></div>
-            </div>
-            <div id="checkboxes"></div>
-          </div>
-
-          <div id="filer&#45;&#45;search" class="filter&#45;&#45;search">
-            <div class="filter&#45;&#45;rest margin&#45;&#45;left_16">
-              <button id="filter&#45;&#45;rest_button" class="btn btn__secondary ">Clear filter</button>
-            </div>
-            <div class="filter&#45;&#45;input-search margin&#45;&#45;left_16">
-              <label for="filer&#45;&#45;input_search" class="margin&#45;&#45;right_8 ">Value: </label>
-              <input id="filer&#45;&#45;input_search" class="npt">
-            </div>
-            <div class="filter&#45;&#45;select-comparision-type margin&#45;&#45;left_16">
-              <label for="filter&#45;&#45;select_comparision_type" class="margin&#45;&#45;right_8 ">Type:</label>
-              <select id="filter&#45;&#45;select_comparision_type" class="npt__select">
-                <option value="=">=</option>
-                <option value="<"><</option>
-                <option value="<="><=</option>
-                <option value=">">></option>
-                <option value=">=">>=</option>
-                <option value="!=">!=</option>
-                <option value="like">contains</option>
-              </select>
-            </div>
-            <div class="filter&#45;&#45;select-property margin&#45;&#45;left_16">
-              <label for="filter&#45;&#45;select_property" class="margin&#45;&#45;right_8">Property: </label>
-              <select id="filter&#45;&#45;select_property" class="npt__select"></select>
-            </div>
-          </div>
-
-        </div>-->
 
         <!--------------------Table content-------------------->
         <div id="table" class="table--container"></div>
-
-        <div id="download_csv--container" class="csv-button--container hide">
-            <button id="download_csv--button" class="btn btn__primary">Download CSV</button>
-        </div>
     </div>
 </div>
 
+<!--------------------modal-------------------->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal__title">Table columns</div>
+            <span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" class="stroke">
+          <path d="M61.21 60.5l-52-52m52 0l-52 52"></path>
+        </svg>
+      </span>
+        </div>
+        <div class="modal__description">Select the columns to display in the table.</div>
+        <div class="column-list" id="column-list">
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn__secondary margin-right__4" id="cancel">Cancel</button>
+            <button class="btn btn__primary" id="confirm">Confirm</button>
+        </div>
+
+    </div>
+</div>
 
 <!--------------------Script-------------------->
 <script src="./js/vendor/tabulator.min.js"></script>

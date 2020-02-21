@@ -46,7 +46,7 @@ body {
 .container__table {
     width: calc(100% - 32px);
     height: calc(100% - 32px);
-    margin: 24px;
+    margin: 20px;
     border-radius: 4px;
     background-color: #FFFFFF;
 }
@@ -164,14 +164,14 @@ body {
 }
 
 .table--item_type {
-    padding: 30px 20px 0 20px;
+    padding: 12px 20px 0 20px;
     color: #303030;
     font-size: 14px;
     line-height: 20px;
 }
 
 .table--item_count {
-    padding: 20px 20px 20px 20px;
+    padding: 12px 20px 12px 20px;
     color: #303030;
     font-size: 14px;
     line-height: 20px;
@@ -179,35 +179,35 @@ body {
 
 .button__container {
     display: flex;
-    padding: 20px;
+    padding: 20px 20px 16px 20px;
     justify-content: space-between;
 }
 
-.btn__edit-column {
+.btn__secondary {
     color: #303030;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     text-align: center;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: transparent;
     padding: 8px 16px;
 }
 
 
-.btn__export-csv .btn__edit-column:hover {
+.btn:hover {
     cursor: pointer;
     filter: brightness(85%);
     transition: all ease-in-out .1s;
 }
 
-.btn__export-csv {
+.btn__primary {
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
     text-align: center;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: #0062FA;
     padding: 8px 16px;
 }
@@ -243,73 +243,169 @@ body {
     margin-left: 16px;
 }
 
-/*---------------------------------------- BUTTON --------------------------------*/
-.btn {
-    display: inline-flex;
-    flex: 0 0 auto;
-    line-height: 1;
-    justify-content: center;
-    align-items: center;
-    box-sizing: content-box;
-    height: 30px;
-    font-size: 14px;
-    font-family: 'roboto', sans-serif;
-    white-space: nowrap;
-    padding: 0 30px;
-    text-align: center;
-    color: #363636;
-    border: 1px solid #CBCBCB;
-    -webkit-transition: 0.2s ease-in-out;
-    transition: 0.2s ease-in-out;
-    text-transform: uppercase;
+/*---------------------------------------- Modal --------------------------------*/
 
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
+/* The Modal (background) */
+.modal {
+    visibility: hidden; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(48, 48, 48, 0.8);
+    transition: all ease-in-out .3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Modal Content */
+.modal-content {
+    padding: 20px;
+    width: 600px;
+    max-height: 500px;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.modal__title {
+    color: #303030;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 24px;
+}
+
+.column-list {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 180px;
+    overflow-y: scroll;
+}
+
+.checkbox-column {
+    width: 100%;
+    padding-bottom: 12px;
+}
+
+.modal-footer {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 16px;
+}
+
+.margin-right__4 {
+    margin-right: 4px;
+}
+
+/* The Close icon */
+svg {
+    stroke-width: 5px;
+    stroke-linecap: round;
+    display: inline-block;
+    vertical-align: top;
+    height: 20px;
+    width: 20px;
+}
+
+svg.stroke {
+    stroke: #303030;
+    fill: none
+}
+
+.stroke:hover,
+.stroke:focus {
+    cursor: pointer;
+}
+
+.modal__description {
+    padding: 32px 0 16px 0;
+    color: #303030;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+
+/*---------------------------------------- BUTTON --------------------------------*/
+/*.btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  line-height: 1;
+  justify-content: center;
+  align-items: center;
+  box-sizing: content-box;
+  height: 30px;
+  font-size: 14px;
+  font-family: 'roboto', sans-serif;
+  white-space: nowrap;
+  padding: 0 30px;
+  text-align: center;
+  color: #363636;
+  border: 1px solid #CBCBCB;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  text-transform: uppercase;
+
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
 }
 
 .btn:focus {
-    outline: 0;
+  outline: 0;
 }
 
 .btn__primary {
-    margin: 16px;
-    background: #0062FA;
-    border-color: #0062FA;
-    color: white;
+  margin: 16px;
+  background: #0062FA;
+  border-color: #0062FA;
+  color: white;
 }
 
 .btn__secondary {
-    color: #0081E3;
-    background: transparent;
-    height: 26px;
+  color: #0081E3;
+  background: transparent;
+  height: 26px;
 }
 
 .btn:hover {
-    cursor: pointer;
-    filter: brightness(85%);
-    transition: all ease-in-out .1s;
+  cursor: pointer;
+  filter: brightness(85%);
+  transition: all ease-in-out .1s;
 }
 
 .btn__close-tab {
-    height: 36px;
-    width: 104px;
-    border-radius: 3px;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    text-align: center;
-    background-color: transparent;
+  height: 36px;
+  width: 104px;
+  border-radius: 3px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  background-color: transparent;
 }
 
 .btn__close-tab:hover {
-    cursor: pointer;
-    filter: brightness(85%);
-    transition: all ease-in-out .1s;
-}
+  cursor: pointer;
+  filter: brightness(85%);
+  transition: all ease-in-out .1s;
+}*/
 
 /*---------------------------------------- SELECT --------------------------------*/
 

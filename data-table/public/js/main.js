@@ -5,13 +5,24 @@ let schema;
 let table;
 let query;
 let pluginConfiguration;
-let showCheckBox = false;
 const loaderElement = document.getElementById('loader');
+const modal = document.getElementById('modal');
 document.getElementById('body').addEventListener('click', (e) => {
-    // document.getElementById('checkboxes').style.display = 'none';
-    showCheckBox = false;
-    e.stopPropagation();
+    if (event.target === modal) {
+        modal.style.visibility = 'hidden';
+        modal.style.opacity = '0';
+    }
 });
+
+window.onkeyup = (e) => {
+    if (
+        e.key === 'Escape' && modal.style.visibility === 'visible'
+    ) {
+        e.preventDefault();
+        modal.style.visibility = 'hidden';
+        modal.style.opacity = '0';
+    }
+};
 
 /**
  * make XMLHttpRequest
@@ -270,60 +281,25 @@ function clearFilter() {
     table.clearFilter();
 }
 
-function switchShowCheckbox(e) {
-    const selectColumnsElement = document.getElementById('checkboxes');
-    if (!showCheckBox) {
-        selectColumnsElement.style.display = 'block';
-        showCheckBox = true;
-    } else {
-        selectColumnsElement.style.display = 'none';
-        showCheckBox = false;
+function filterTableColumns() {
+    const list = document.getElementsByTagName('input');
+    for (let i = 0; i < list.length; i++) {
+        console.log(list[i]);
+        if (list[i].checked) {
+            table.showColumn(list[i].id);
+        } else {
+            table.hideColumn(list[i].id);
+        }
     }
-    e.stopPropagation();
-}
-
-function preventPropagation(e) {
-    e.stopPropagation();
-}
-
-function filterTableColumns(e) {
-    if (e.target.checked) {
-        table.showColumn(e.target.id);
-    } else {
-        table.hideColumn(e.target.id);
-    }
+    closeModal();
 }
 
 function addFilter() {
     setTimeout(() => {
-        const columnsList = table.getColumnDefinitions();
 
         // add select element to choose the columns to show
         // document.getElementById('columns_select').addEventListener('click', switchShowCheckbox);
         // document.getElementById('checkboxes').addEventListener('click', preventPropagation);
-        const selectColumnsElement = document.getElementById('checkboxes');
-        columnsList.forEach((column) => {
-            const label = document.createElement('label');
-            const description = document.createTextNode(truncateText(column.title, 30));
-            const checkBoxElement = document.createElement('input');
-            checkBoxElement.setAttribute('type', 'checkbox');
-            checkBoxElement.setAttribute('id', column.title);
-            checkBoxElement.setAttribute('name', column.title);
-            checkBoxElement.checked = true;
-            label.appendChild(checkBoxElement);
-            label.appendChild(description);
-            selectColumnsElement.appendChild(label);
-            checkBoxElement.addEventListener('change', filterTableColumns);
-        });
-
-        // add select element to choose the properties
-        const selectPropertyElement = document.getElementById('filter--select_property');
-        columnsList.forEach((column) => {
-            const optionElement = document.createElement('option');
-            optionElement.value = column.title;
-            optionElement.text = truncateText(column.title, 20);
-            selectPropertyElement.appendChild(optionElement);
-        });
 
         document.getElementById('table_filter').classList.remove('hide');
         document.getElementById('filter--select_property').addEventListener('change', updateFilter);
@@ -335,6 +311,43 @@ function addFilter() {
 
 }
 
+function fillModalColumns() {
+    setTimeout(() => {
+        const columnsList = table.getColumnDefinitions();
+        const selectColumnsElement = document.getElementById('column-list');
+        columnsList.forEach(async (column, index) => {
+            const columnCheckBoxDiv = document.createElement('div');
+            const columnCheckBoxLabel = document.createElement('label');
+            const description = document.createTextNode(truncateText(column.title, 30));
+            const checkBoxElement = document.createElement('input');
+            columnCheckBoxLabel.setAttribute('for', column.title.replace(' ', ''));
+            checkBoxElement.setAttribute('type', 'checkbox');
+            checkBoxElement.setAttribute('id', column.title.replace(' ', ''));
+            checkBoxElement.setAttribute('name', column.title.replace(' ', ''));
+            checkBoxElement.style.marginRight = '4px';
+            checkBoxElement.checked = true;
+            columnCheckBoxLabel.appendChild(description);
+            columnCheckBoxDiv.appendChild(checkBoxElement);
+            columnCheckBoxDiv.appendChild(columnCheckBoxLabel);
+            selectColumnsElement.appendChild(columnCheckBoxDiv);
+            // checkBoxElement.addEventListener('click', filterTableColumns)
+            columnCheckBoxDiv.classList.add('checkbox-column');
+        });
+        document.getElementById('cancel').addEventListener('click', closeModal);
+        document.getElementById('confirm').addEventListener('click', filterTableColumns);
+    }, 10);
+}
+
+function closeModal() {
+    modal.style.visibility = 'hidden';
+    modal.style.opacity = '0';
+}
+
+function showModal() {
+    modal.style.visibility = 'visible';
+    modal.style.opacity = '1';
+}
+
 function addButtons() {
     setTimeout(() => {
         document.getElementById('button-export').classList.remove('hide');
@@ -342,9 +355,7 @@ function addButtons() {
             table.download('csv', 'data.csv');
         });
         document.getElementById('button-edit').classList.remove('hide');
-        document.getElementById('button-edit').addEventListener('click', () => {
-            console.log('open modal');
-        });
+        document.getElementById('button-edit').addEventListener('click', showModal);
     }, 10);
 }
 
@@ -353,7 +364,6 @@ function fillDataTable() {
     setTableTitle();
     tableStructure = getTableStructure(schema);
     const tableData = getTableData({...queryResult});
-
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
         tooltipsHeader: getTooltipsHeader,
@@ -372,6 +382,7 @@ function fillDataTable() {
         }
     });
     // addFilter();
+    fillModalColumns();
     addButtons();
 }
 
