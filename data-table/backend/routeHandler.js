@@ -41,7 +41,7 @@ module.exports = function configureRoutes(options) {
             res.send(JSON.stringify({status: 412, body: {error}}));
         } else {
             res.status(200);
-            res.send();
+            res.send(JSON.stringify(options.configuration));
         }
     });
 
@@ -65,10 +65,17 @@ module.exports = function configureRoutes(options) {
         if (req.body.query.templateFields) {
             data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields);
         }
-        const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
-        res.status(200);
-        res.contentType('application/json');
-        res.send(JSON.stringify(queryResult));
+        try {
+            const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
+            res.status(200);
+            res.contentType('application/json');
+            res.send(JSON.stringify(queryResult));
+        } catch(e) {
+            res.status(400);
+            res.contentType('application/json');
+            res.send(JSON.stringify({status: 400, body: {error: e.originalResponse.body}}));
+        }
+
     });
 
     options.router.get('/getSchema', async (req, res) => {

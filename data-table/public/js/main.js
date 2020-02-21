@@ -3,10 +3,12 @@ let queryParams;
 let tableStructure;
 let schema;
 let table;
+let query;
+let pluginConfiguration;
 let showCheckBox = false;
 const loaderElement = document.getElementById('loader');
 document.getElementById('body').addEventListener('click', (e) => {
-    document.getElementById('checkboxes').style.display = 'none';
+    // document.getElementById('checkboxes').style.display = 'none';
     showCheckBox = false;
     e.stopPropagation();
 });
@@ -17,8 +19,8 @@ document.getElementById('body').addEventListener('click', (e) => {
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
     // Return it as a Promise
-    return new Promise(function (resolve, reject) {
-        xmlHttp.onreadystatechange = function () {
+    return new Promise(function(resolve, reject) {
+        xmlHttp.onreadystatechange = function() {
             // Only run if the request is complete
             if (xmlHttp.readyState !== 4) {
                 return;
@@ -47,11 +49,18 @@ function makeRequest(verb = 'GET', url, body) {
  * @param event
  */
 function handleError(event) {
+    console.log(event);
     document.getElementById('error_description').innerText = event.body.message;
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
     document.getElementById('error').classList.remove('hide');
+    document.getElementById('button-close').addEventListener('click', closeTab);
+
     throw Error(event.body.message);
+}
+
+function closeTab() {
+    window.open(`${location.href}&close=true`, '_self');
 }
 
 function setQueryResult(result) {
@@ -101,7 +110,8 @@ function getParameter(item) {
         oneOf: [
             'sourceKey',
             'limit',
-            'queryId'
+            'queryId',
+            'close'
         ],
         startWith: [
             'param_number_',
@@ -126,14 +136,8 @@ function getParameter(item) {
     }
 }
 
-function validateQueryParams(query) {
-    if (queryParams.global.queryId === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “query_id”'}});
-    } else if (!Number.isInteger(+queryParams.global.queryId)) {
-        return handleError({body: {message: 'URL parameter “query_id” must be a number'}});
-    } else if (queryParams.global.sourceKey === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
-    } else if (query.templateFields && query.templateFields.length > 0) {
+function validateTemplateFieldsParams(query) {
+    if (query.templateFields && query.templateFields.length > 0) {
         query.templateFields.forEach(template => {
             if (queryParams.templateFields.hasOwnProperty(template.key)) {
                 if (template.type === 'number' && isNaN(+queryParams.templateFields[template.key])) {
@@ -142,8 +146,17 @@ function validateQueryParams(query) {
             } else {
                 return handleError({body: {message: `Missing URL parameter “${template.key}”`}});
             }
-
         });
+    }
+}
+
+function validateGlobalQueryParams(params) {
+    if (params.queryId === undefined) {
+        return handleError({body: {message: 'Missing URL parameter “query_id”'}});
+    } else if (!Number.isInteger(+params.queryId)) {
+        return handleError({body: {message: 'URL parameter “query_id” must be a number'}});
+    } else if (params.sourceKey === undefined) {
+        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
     }
     return true;
 }
@@ -167,13 +180,15 @@ async function getSchema() {
 
 async function validatePluginConfiguration() {
     try {
-        await makeRequest(
+        const result = await makeRequest(
             'POST',
             `/api/plugins/table/checkPluginsConfiguration`,
             {results: schema}
         );
+        pluginConfiguration = JSON.parse(result.response);
+        console.log(pluginConfiguration);
         return true;
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
@@ -228,9 +243,14 @@ function getTooltipsHeader(column) {
 }
 
 function setTableTitle() {
-    document.getElementById('table_title').innerText = (queryResult.nodes.length > 0) ?
-        `List of properties (Categories: ${queryResult.nodes[0].data.categories}):` :
-        `List of properties (type: ${queryResult.edges[0].data.type}):`;
+    document.getElementById('table_title').innerText = query.name;
+    if (pluginConfiguration.entityType === undefined || pluginConfiguration.entityType === 'node') {
+        document.getElementById('item_type').innerText = `Node type : ${pluginConfiguration.itemType}`;
+        document.getElementById('item_count').innerText = `Number of nodes : ${queryResult.nodes.length}`;
+    } else if (pluginConfiguration.entityType === 'node') {
+        document.getElementById('item_type').innerText = `Edge type : ${pluginConfiguration.itemType}`;
+        document.getElementById('item_count').innerText = `Number of edges : ${queryResult.edges.length}`;
+    }
 }
 
 function updateFilter() {
@@ -279,8 +299,8 @@ function addFilter() {
         const columnsList = table.getColumnDefinitions();
 
         // add select element to choose the columns to show
-        document.getElementById('columns_select').addEventListener('click', switchShowCheckbox);
-        document.getElementById('checkboxes').addEventListener('click', preventPropagation);
+        // document.getElementById('columns_select').addEventListener('click', switchShowCheckbox);
+        // document.getElementById('checkboxes').addEventListener('click', preventPropagation);
         const selectColumnsElement = document.getElementById('checkboxes');
         columnsList.forEach((column) => {
             const label = document.createElement('label');
@@ -315,11 +335,15 @@ function addFilter() {
 
 }
 
-function addDownloadCSVButton() {
+function addButtons() {
     setTimeout(() => {
-        document.getElementById('download_csv--container').classList.remove('hide');
-        document.getElementById('download_csv--button').addEventListener('click', () => {
+        document.getElementById('button-export').classList.remove('hide');
+        document.getElementById('button-export').addEventListener('click', () => {
             table.download('csv', 'data.csv');
+        });
+        document.getElementById('button-edit').classList.remove('hide');
+        document.getElementById('button-edit').addEventListener('click', () => {
+            console.log('open modal');
         });
     }, 10);
 }
@@ -343,12 +367,12 @@ function fillDataTable() {
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
         columns: tableStructure,
-        rowClick: function (e, row) { //trigger an alert message when the row is clicked
+        rowClick: function(e, row) { //trigger an alert message when the row is clicked
             alert('Row ' + row.getData().id + ' Clicked!!!!');
         }
     });
-    addFilter();
-    addDownloadCSVButton();
+    // addFilter();
+    addButtons();
 }
 
 async function getQuery() {
@@ -361,7 +385,7 @@ async function getQuery() {
                 sourceKey: queryParams.global.sourceKey
             }
         );
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
@@ -369,13 +393,21 @@ async function getQuery() {
 async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
-    const query = JSON.parse((await getQuery()).response).body;
-    validateQueryParams(query);
-    await getSchema();
-    const isConfigurationValid = await validatePluginConfiguration();
-    if (isConfigurationValid) {
-        await runQueryByID(query);
-        fillDataTable();
+    if (queryParams.global.close === 'true') {
+        window.close();
+    }
+    try {
+        validateGlobalQueryParams(queryParams.global);
+        query = JSON.parse((await getQuery()).response).body;
+        validateTemplateFieldsParams(query);
+        await getSchema();
+        const isConfigurationValid = await validatePluginConfiguration();
+        if (isConfigurationValid) {
+            await runQueryByID(query);
+            fillDataTable();
+        }
+    } catch(e) {
+        handleError(e);
     }
 
 }
