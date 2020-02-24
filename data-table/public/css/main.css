@@ -44,11 +44,12 @@ body {
 }
 
 .container__table {
-    width: calc(100% - 32px);
-    height: calc(100% - 32px);
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
     margin: 20px;
     border-radius: 4px;
     background-color: #FFFFFF;
+    box-shadow: 0 0 2px 0 rgba(128, 131, 132, 0.17), 0 2px 6px 0 rgba(61, 61, 61, 0.36);
 }
 
 .description {
@@ -363,73 +364,39 @@ svg.stroke {
 }
 
 
-/*---------------------------------------- BUTTON --------------------------------*/
-/*.btn {
-  display: inline-flex;
-  flex: 0 0 auto;
-  line-height: 1;
-  justify-content: center;
-  align-items: center;
-  box-sizing: content-box;
-  height: 30px;
-  font-size: 14px;
-  font-family: 'roboto', sans-serif;
-  white-space: nowrap;
-  padding: 0 30px;
-  text-align: center;
-  color: #363636;
-  border: 1px solid #CBCBCB;
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  text-transform: uppercase;
+/*---------------------------------------- TABULATOR OVERRIDE  --------------------------------*/
 
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
+.tabulator-cell {
+    height: 38px;
+    padding: 12px !important;
+    border-bottom: 1px solid #aaa !important;
+    background-color: #fff !important;
 }
 
-.btn:focus {
-  outline: 0;
+.tabulator-row {
+    background-color: #FAFAFA !important;
 }
 
-.btn__primary {
-  margin: 16px;
-  background: #0062FA;
-  border-color: #0062FA;
-  color: white;
+.tabulator-col {
+    height: 32px;
+    text-align: center !important;
+    padding: 8px !important;
 }
 
-.btn__secondary {
-  color: #0081E3;
-  background: transparent;
-  height: 26px;
+.tabulator {
+    border-radius: 4px !important;
+    background-color: #D7D9D9 !important;
 }
 
-.btn:hover {
-  cursor: pointer;
-  filter: brightness(85%);
-  transition: all ease-in-out .1s;
+.tabulator-footer {
+    height: 38px !important;
+    background-color: #fff !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
 }
 
-.btn__close-tab {
-  height: 36px;
-  width: 104px;
-  border-radius: 3px;
-  color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  text-align: center;
-  background-color: transparent;
-}
-
-.btn__close-tab:hover {
-  cursor: pointer;
-  filter: brightness(85%);
-  transition: all ease-in-out .1s;
-}*/
 
 /*---------------------------------------- SELECT --------------------------------*/
 

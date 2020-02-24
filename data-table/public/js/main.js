@@ -262,10 +262,15 @@ function getTableStructure(schemaStructure) {
             title: property.propertyKey,
             field: property.propertyKey,
             align: align,
-            titleFormatter: truncateColumnTitle
+            titleFormatter: truncateColumnTitle,
+            headerSort: false
         };
     });
-    return [{title: 'Row', field: 'row', align: 'right'}, {title: 'id', field: 'id', align: 'right'}, ...sanitizedData];
+    return [
+        {title: 'Row', field: 'row', align: 'center', headerSort: false},
+        {title: 'id', field: 'id', align: 'right', headerSort: false},
+        ...sanitizedData
+    ];
 }
 
 function getTableData(queryResult) {
@@ -420,10 +425,7 @@ function fillDataTable() {
         placeholder: 'No result was returned.',
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
-        columns: tableStructure,
-        rowClick: function (e, row) { //trigger an alert message when the row is clicked
-            alert('Row ' + row.getData().id + ' Clicked!!!!');
-        }
+        columns: tableStructure
     });
     fillModalColumns();
     addButtons();
