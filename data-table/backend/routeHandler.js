@@ -24,7 +24,7 @@ module.exports = function configureRoutes(options) {
         } else if (!schemaTypes.some((type => type.itemType === itemType))) {
             return {message: 'Invalid plugin configuration “itemType” (must be an existing node category or edge type)'};
         }
-        if (!Array.isArray(properties) || properties.length === 0) {
+        if (properties && (!Array.isArray(properties) || properties.length === 0)) {
             return {message: 'Invalid plugin configuration “properties” (must be a non-empty array of property names)'};
         }
         return null;

@@ -30,8 +30,8 @@ window.onkeyup = (e) => {
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
     // Return it as a Promise
-    return new Promise(function(resolve, reject) {
-        xmlHttp.onreadystatechange = function() {
+    return new Promise(function (resolve, reject) {
+        xmlHttp.onreadystatechange = function () {
             // Only run if the request is complete
             if (xmlHttp.readyState !== 4) {
                 return;
@@ -76,7 +76,12 @@ function closeTab() {
 
 function setQueryResult(result) {
     if (result.status === 200) {
-        queryResult = result.body;
+        queryResult = {truncatedByLimit: result.body.truncatedByLimit};
+        if (pluginConfiguration.entityType && pluginConfiguration.entityType === 'edge') {
+            queryResult.result = result.body.edges.filter(edge => edge.data.type === pluginConfiguration.itemType);
+        } else {
+            queryResult.result = result.body.nodes.filter(node => node.data.categories.includes(pluginConfiguration.itemType));
+        }
     } else {
         handleError(result);
     }
@@ -85,7 +90,7 @@ function setQueryResult(result) {
 async function runQueryByID(query) {
     const result = await makeRequest(
         'POST',
-        `/api/plugins/table/runQueryByIDPlugin`,
+        `/plugins/table/api/runQueryByIDPlugin`,
         {query, queryParams}
     );
     setQueryResult(JSON.parse(result.response));
@@ -183,7 +188,7 @@ function setSchema(result) {
 async function getSchema() {
     const result = await makeRequest(
         'GET',
-        `/api/plugins/table/getSchema?sourceKey=${queryParams.global.sourceKey}`,
+        `/plugins/table/api/getSchema?sourceKey=${queryParams.global.sourceKey}`,
         null
     );
     setSchema(JSON.parse(result.response));
@@ -193,13 +198,12 @@ async function validatePluginConfiguration() {
     try {
         const result = await makeRequest(
             'POST',
-            `/api/plugins/table/checkPluginsConfiguration`,
+            `/plugins/table/api/checkPluginsConfiguration`,
             {results: schema}
         );
         pluginConfiguration = JSON.parse(result.response);
-        console.log(pluginConfiguration);
         return true;
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 }
@@ -217,36 +221,66 @@ function truncateText(text, maxLength = 50) {
 }
 
 function getFilteredSchema(schemaStructure) {
-    if (queryResult.nodes.length > 0) {
-        return schemaStructure.filter(result => {
-            return queryResult.nodes[0].data.categories.includes(result.itemType);
+    const properties = schemaStructure.find(item => item.itemType === pluginConfiguration.itemType).properties || [];
+    let sortedProperties = [];
+    if (pluginConfiguration.properties) {
+        pluginConfiguration.properties.forEach(propertyName => {
+            const property = properties.find(property => property.propertyKey === propertyName);
+            if (property) {
+                sortedProperties.push(property);
+            }
         });
     } else {
-        return schemaStructure.filter(result => {
-            return queryResult.edges[0].data.type === result.itemType;
-        });
+        sortedProperties = sortAlphabetically(properties, 'propertyKey');
     }
+    return sortedProperties;
+}
+
+function sortAlphabetically(arr, objKey) {
+    return arr.sort((a, b) => {
+        const aK = objKey ? a[objKey] : a;
+        const bK = objKey ? b[objKey] : b;
+        const sanitizedA = typeof aK === 'string' ? aK.toLowerCase() : aK;
+        const sanitizedB = typeof bK === 'string' ? bK.toLowerCase() : bK;
+        return sanitizedA < sanitizedB ? -1 : sanitizedA > sanitizedB ? 1 : 0;
+    });
 }
 
 function getTableStructure(schemaStructure) {
-    const filteredSchema = getFilteredSchema(schemaStructure);
-    const sanitizedData = filteredSchema[0].properties.map(property => {
+    const properties = getFilteredSchema(schemaStructure);
+    const sanitizedData = properties.map(property => {
+        let align = 'left';
+        if (
+            property.propertyType &&
+            (property.propertyType.name === 'number' ||
+                property.propertyType.name === 'date' ||
+                property.propertyType.name === 'datetime')
+        ) {
+            align = 'right';
+        }
         return {
             title: property.propertyKey,
             field: property.propertyKey,
-            align: 'left',
+            align: align,
             titleFormatter: truncateColumnTitle
         };
     });
-    return [{title: 'id', field: 'id', align: 'center'}, ...sanitizedData];
+    return [{title: 'Row', field: 'row', align: 'right'}, {title: 'id', field: 'id', align: 'right'}, ...sanitizedData];
 }
 
 function getTableData(queryResult) {
-    return (queryResult.nodes.length > 0) ?
-        queryResult.nodes.map(node => {
-            return {...node.data.properties, 'id': node.id};
-        }) :
-        queryResult.edges.map(edge => edge.data.properties);
+    return queryResult.result.map((item, index) => {
+        for (let [key, value] of Object.entries(item.data.properties)) {
+            if (typeof value === 'object') {
+                if (value.value && (value.type === 'date' || value.type === 'datetime')) {
+                    item.data.properties[key] = new Date(value.value).toISOString();
+                } else {
+                    item.data.properties[key] = value.value || value.original;
+                }
+            }
+        }
+        return {...item.data.properties, 'id': item.id, 'row': index + 1};
+    });
 }
 
 function getTooltipsHeader(column) {
@@ -254,13 +288,20 @@ function getTooltipsHeader(column) {
 }
 
 function setTableTitle() {
+    if (queryResult.truncatedByLimit && queryParams.global.limit === undefined) {
+        document.getElementById('warning').classList.remove('hide');
+    }
     document.getElementById('table_title').innerText = query.name;
     if (pluginConfiguration.entityType === undefined || pluginConfiguration.entityType === 'node') {
+        document.getElementById('warning_text').innerText = `The query returned too many results. The ${
+            queryResult.result.length} first results are displayed below.`;
         document.getElementById('item_type').innerText = `Node type : ${pluginConfiguration.itemType}`;
-        document.getElementById('item_count').innerText = `Number of nodes : ${queryResult.nodes.length}`;
-    } else if (pluginConfiguration.entityType === 'node') {
+        document.getElementById('item_count').innerText = `Number of nodes : ${queryResult.result.length}`;
+    } else if (pluginConfiguration.entityType === 'edge') {
+        document.getElementById('warning_text').innerText = `The query returned too many results. The ${
+            queryResult.result.length} first results are displayed below.`;
         document.getElementById('item_type').innerText = `Edge type : ${pluginConfiguration.itemType}`;
-        document.getElementById('item_count').innerText = `Number of edges : ${queryResult.edges.length}`;
+        document.getElementById('item_count').innerText = `Number of edges : ${queryResult.result.length}`;
     }
 }
 
@@ -284,7 +325,6 @@ function clearFilter() {
 function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
-        console.log(list[i]);
         if (list[i].checked) {
             table.showColumn(list[i].id);
         } else {
@@ -360,28 +400,31 @@ function addButtons() {
 }
 
 function fillDataTable() {
-    loaderElement.classList.remove('active');
-    setTableTitle();
     tableStructure = getTableStructure(schema);
     const tableData = getTableData({...queryResult});
+    console.log(tableData);
+    console.log(tableStructure);
+    if (tableData.length === 0) {
+        return handleError({body: {message: 'No result was returned.'}});
+    }
+    loaderElement.classList.remove('active');
+    setTableTitle();
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
         tooltipsHeader: getTooltipsHeader,
         layoutColumnsOnNewData: true,
         resizableColumns: false,
         pagination: 'local',
-        paginationSize: 15,
-        paginationSizeSelector: [8, 12, 16, 20],
+        paginationSize: 10,
         movableColumns: true,
-        placeholder: 'There was not matches for the filter',
+        placeholder: 'No result was returned.',
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
         columns: tableStructure,
-        rowClick: function(e, row) { //trigger an alert message when the row is clicked
+        rowClick: function (e, row) { //trigger an alert message when the row is clicked
             alert('Row ' + row.getData().id + ' Clicked!!!!');
         }
     });
-    // addFilter();
     fillModalColumns();
     addButtons();
 }
@@ -390,13 +433,13 @@ async function getQuery() {
     try {
         return await makeRequest(
             'POST',
-            `/api/plugins/table/getQuery`,
+            `/plugins/table/api/getQuery`,
             {
                 id: queryParams.global.queryId,
                 sourceKey: queryParams.global.sourceKey
             }
         );
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 }
@@ -417,7 +460,7 @@ async function main() {
             await runQueryByID(query);
             fillDataTable();
         }
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 
