@@ -23,13 +23,12 @@
 <div class="loader__curtain" id="loader">
     <div class="loader__container" id="loading">
         <div class="progress_spinner spinner" id="spinner"></div>
-        <div class="title">Processing your request…</div>
+        <div class="loader__title">Processing your request…</div>
     </div>
     <!-- Error -->
     <div class="loader__container hide" id="error">
-        <div class="title" id="error_description"></div>
+        <div class="loader__title" id="error_description"></div>
         <button class="btn__close-tab" id="button-close">CLOSE TAB</button>
-        <!--<div class="description" id="error_description"></div>-->
     </div>
 </div>
 
@@ -60,7 +59,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <div class="modal__title">Table columns</div>
-            <span>
+            <span id="modal_close">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" class="stroke">
           <path d="M61.21 60.5l-52-52m52 0l-52 52"></path>
         </svg>

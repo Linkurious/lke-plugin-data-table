@@ -30,8 +30,8 @@ window.onkeyup = (e) => {
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
     // Return it as a Promise
-    return new Promise(function (resolve, reject) {
-        xmlHttp.onreadystatechange = function () {
+    return new Promise(function(resolve, reject) {
+        xmlHttp.onreadystatechange = function() {
             // Only run if the request is complete
             if (xmlHttp.readyState !== 4) {
                 return;
@@ -203,21 +203,35 @@ async function validatePluginConfiguration() {
         );
         pluginConfiguration = JSON.parse(result.response);
         return true;
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
 
 function truncateColumnTitle(cell) {
+    return truncateText(cell.getValue(), 38);
+}
+
+function truncateFieldValue(cell) {
     return truncateText(cell.getValue());
 }
 
-function truncateText(text, maxLength = 50) {
+function truncateText(text = '', maxLength = 50) {
     if (text.length > maxLength) {
         return `${text.slice(0, maxLength - 2)}...`;
     } else {
         return text;
     }
+}
+
+function getFieldTooltip(cell) {
+    if (cell.getValue() && cell.getValue().length > 50) {
+        if (cell.getValue().length > 300) {
+            return cell.getValue().slice(0, 299);
+        }
+        return cell.getValue();
+    }
+    return false;
 }
 
 function getFilteredSchema(schemaStructure) {
@@ -263,11 +277,13 @@ function getTableStructure(schemaStructure) {
             field: property.propertyKey,
             align: align,
             titleFormatter: truncateColumnTitle,
-            headerSort: false
+            headerSort: false,
+            formatter: truncateFieldValue,
+            tooltip: getFieldTooltip
         };
     });
     return [
-        {title: 'Row', field: 'row', align: 'center', headerSort: false},
+        {title: 'Row', field: 'row', align: 'center', headerSort: false, frozen: true},
         {title: 'id', field: 'id', align: 'right', headerSort: false},
         ...sanitizedData
     ];
@@ -278,7 +294,7 @@ function getTableData(queryResult) {
         for (let [key, value] of Object.entries(item.data.properties)) {
             if (typeof value === 'object') {
                 if (value.value && (value.type === 'date' || value.type === 'datetime')) {
-                    item.data.properties[key] = new Date(value.value).toISOString();
+                    item.data.properties[key] = (new Date(value.value)).toISOString();
                 } else {
                     item.data.properties[key] = value.value || value.original;
                 }
@@ -289,7 +305,10 @@ function getTableData(queryResult) {
 }
 
 function getTooltipsHeader(column) {
-    return column.getDefinition().title;
+    if (column.getDefinition().title && column.getDefinition().title.length * 8 > 300) {
+        return column.getDefinition().title;
+    }
+    return false;
 }
 
 function setTableTitle() {
@@ -310,25 +329,9 @@ function setTableTitle() {
     }
 }
 
-function updateFilter() {
-    const propertyFilter = document.getElementById('filter--select_property');
-    const typeFilter = document.getElementById('filter--select_comparision_type');
-    table.setFilter(
-        propertyFilter.options[propertyFilter.selectedIndex].value,
-        typeFilter.options[typeFilter.selectedIndex].value,
-        document.getElementById('filer--input_search').value
-    );
-}
-
-function clearFilter() {
-    document.getElementById('filter--select_property').value = 'id';
-    document.getElementById('filter--select_comparision_type').value = '=';
-    document.getElementById('filer--input_search').value = '';
-    table.clearFilter();
-}
-
 function filterTableColumns() {
     const list = document.getElementsByTagName('input');
+    console.log(table);
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
             table.showColumn(list[i].id);
@@ -339,44 +342,30 @@ function filterTableColumns() {
     closeModal();
 }
 
-function addFilter() {
-    setTimeout(() => {
-
-        // add select element to choose the columns to show
-        // document.getElementById('columns_select').addEventListener('click', switchShowCheckbox);
-        // document.getElementById('checkboxes').addEventListener('click', preventPropagation);
-
-        document.getElementById('table_filter').classList.remove('hide');
-        document.getElementById('filter--select_property').addEventListener('change', updateFilter);
-        document.getElementById('filter--select_comparision_type').addEventListener('change', updateFilter);
-        document.getElementById('filer--input_search').addEventListener('keyup', updateFilter);
-        document.getElementById('filter--rest_button').addEventListener('click', clearFilter);
-
-    }, 10);
-
-}
-
 function fillModalColumns() {
     setTimeout(() => {
+        document.getElementById('modal_close').addEventListener('click', closeModal);
         const columnsList = table.getColumnDefinitions();
         const selectColumnsElement = document.getElementById('column-list');
-        columnsList.forEach(async (column, index) => {
-            const columnCheckBoxDiv = document.createElement('div');
-            const columnCheckBoxLabel = document.createElement('label');
-            const description = document.createTextNode(truncateText(column.title, 30));
-            const checkBoxElement = document.createElement('input');
-            columnCheckBoxLabel.setAttribute('for', column.title.replace(' ', ''));
-            checkBoxElement.setAttribute('type', 'checkbox');
-            checkBoxElement.setAttribute('id', column.title.replace(' ', ''));
-            checkBoxElement.setAttribute('name', column.title.replace(' ', ''));
-            checkBoxElement.style.marginRight = '4px';
-            checkBoxElement.checked = true;
-            columnCheckBoxLabel.appendChild(description);
-            columnCheckBoxDiv.appendChild(checkBoxElement);
-            columnCheckBoxDiv.appendChild(columnCheckBoxLabel);
-            selectColumnsElement.appendChild(columnCheckBoxDiv);
-            // checkBoxElement.addEventListener('click', filterTableColumns)
-            columnCheckBoxDiv.classList.add('checkbox-column');
+        columnsList.forEach(async (column) => {
+            if (column.title !== 'Row') {
+                const columnCheckBoxDiv = document.createElement('div');
+                const columnCheckBoxLabel = document.createElement('label');
+                const description = document.createTextNode(truncateText(column.title, 38));
+                const checkBoxElement = document.createElement('input');
+                columnCheckBoxLabel.setAttribute('for', column.title);
+                checkBoxElement.setAttribute('type', 'checkbox');
+                checkBoxElement.setAttribute('id', column.title);
+                checkBoxElement.setAttribute('name', column.title.replace(' ', ''));
+                checkBoxElement.style.marginRight = '4px';
+                checkBoxElement.checked = true;
+                columnCheckBoxLabel.appendChild(description);
+                columnCheckBoxDiv.appendChild(checkBoxElement);
+                columnCheckBoxDiv.appendChild(columnCheckBoxLabel);
+                selectColumnsElement.appendChild(columnCheckBoxDiv);
+                // checkBoxElement.addEventListener('click', filterTableColumns)
+                columnCheckBoxDiv.classList.add('checkbox-column');
+            }
         });
         document.getElementById('cancel').addEventListener('click', closeModal);
         document.getElementById('confirm').addEventListener('click', filterTableColumns);
@@ -425,7 +414,10 @@ function fillDataTable() {
         placeholder: 'No result was returned.',
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
-        columns: tableStructure
+        columns: tableStructure,
+        paginationButtonCount: 1,
+        height: 468,
+        tooltipGenerationMode: 'hover'
     });
     fillModalColumns();
     addButtons();
@@ -441,7 +433,7 @@ async function getQuery() {
                 sourceKey: queryParams.global.sourceKey
             }
         );
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
@@ -462,7 +454,7 @@ async function main() {
             await runQueryByID(query);
             fillDataTable();
         }
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 
