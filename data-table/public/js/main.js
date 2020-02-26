@@ -5,9 +5,10 @@ let schema;
 let table;
 let query;
 let pluginConfiguration;
+const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
 const modal = document.getElementById('modal');
-document.getElementById('body').addEventListener('click', (e) => {
+document.getElementById('body').addEventListener('click', () => {
     if (event.target === modal) {
         modal.style.visibility = 'hidden';
         modal.style.opacity = '0';
@@ -29,9 +30,8 @@ window.onkeyup = (e) => {
  */
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
-    // Return it as a Promise
-    return new Promise(function(resolve, reject) {
-        xmlHttp.onreadystatechange = function() {
+    return new Promise((resolve, reject) => {
+        xmlHttp.onreadystatechange = () => {
             // Only run if the request is complete
             if (xmlHttp.readyState !== 4) {
                 return;
@@ -60,18 +60,11 @@ function makeRequest(verb = 'GET', url, body) {
  * @param event
  */
 function handleError(event) {
-    console.log(event);
     document.getElementById('error_description').innerText = event.body.message;
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
     document.getElementById('error').classList.remove('hide');
-    document.getElementById('button-close').addEventListener('click', closeTab);
-
     throw Error(event.body.message);
-}
-
-function closeTab() {
-    window.open(`${location.href}&close=true`, '_self');
 }
 
 function setQueryResult(result) {
@@ -88,12 +81,17 @@ function setQueryResult(result) {
 }
 
 async function runQueryByID(query) {
-    const result = await makeRequest(
-        'POST',
-        `/plugins/table/api/runQueryByIDPlugin`,
-        {query, queryParams}
-    );
-    setQueryResult(JSON.parse(result.response));
+    try {
+        const result = await makeRequest(
+            'POST',
+            `/plugins/table/api/runQueryByIDPlugin`,
+            {query, queryParams}
+        );
+        setQueryResult(JSON.parse(result.response));
+    } catch(e) {
+        handleError(e);
+    }
+
 }
 
 /**
@@ -126,8 +124,7 @@ function getParameter(item) {
         oneOf: [
             'sourceKey',
             'limit',
-            'queryId',
-            'close'
+            'queryId'
         ],
         startWith: [
             'param_number_',
@@ -186,12 +183,17 @@ function setSchema(result) {
 }
 
 async function getSchema() {
-    const result = await makeRequest(
-        'GET',
-        `/plugins/table/api/getSchema?sourceKey=${queryParams.global.sourceKey}`,
-        null
-    );
-    setSchema(JSON.parse(result.response));
+    try {
+        const result = await makeRequest(
+            'GET',
+            `/plugins/table/api/getSchema?sourceKey=${queryParams.global.sourceKey}`,
+            null
+        );
+        setSchema(JSON.parse(result.response));
+    } catch(e) {
+        handleError(e);
+    }
+
 }
 
 async function validatePluginConfiguration() {
@@ -262,7 +264,7 @@ function sortAlphabetically(arr, objKey) {
 
 function getTableStructure(schemaStructure) {
     const properties = getFilteredSchema(schemaStructure);
-    const sanitizedData = properties.map(property => {
+    const sanitizedData = properties.map((property, index) => {
         let align = 'left';
         if (
             property.propertyType &&
@@ -271,6 +273,7 @@ function getTableStructure(schemaStructure) {
                 property.propertyType.name === 'datetime')
         ) {
             align = 'right';
+            headersToAlignRight.push(index + 2);
         }
         return {
             title: property.propertyKey,
@@ -283,7 +286,7 @@ function getTableStructure(schemaStructure) {
         };
     });
     return [
-        {title: 'Row', field: 'row', align: 'center', headerSort: false, frozen: true},
+        {title: 'row', field: 'row', align: 'center', headerSort: false, frozen: true},
         {title: 'id', field: 'id', align: 'right', headerSort: false},
         ...sanitizedData
     ];
@@ -331,7 +334,6 @@ function setTableTitle() {
 
 function filterTableColumns() {
     const list = document.getElementsByTagName('input');
-    console.log(table);
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
             table.showColumn(list[i].id);
@@ -343,33 +345,30 @@ function filterTableColumns() {
 }
 
 function fillModalColumns() {
-    setTimeout(() => {
-        document.getElementById('modal_close').addEventListener('click', closeModal);
-        const columnsList = table.getColumnDefinitions();
-        const selectColumnsElement = document.getElementById('column-list');
-        columnsList.forEach(async (column) => {
-            if (column.title !== 'Row') {
-                const columnCheckBoxDiv = document.createElement('div');
-                const columnCheckBoxLabel = document.createElement('label');
-                const description = document.createTextNode(truncateText(column.title, 38));
-                const checkBoxElement = document.createElement('input');
-                columnCheckBoxLabel.setAttribute('for', column.title);
-                checkBoxElement.setAttribute('type', 'checkbox');
-                checkBoxElement.setAttribute('id', column.title);
-                checkBoxElement.setAttribute('name', column.title.replace(' ', ''));
-                checkBoxElement.style.marginRight = '4px';
-                checkBoxElement.checked = true;
-                columnCheckBoxLabel.appendChild(description);
-                columnCheckBoxDiv.appendChild(checkBoxElement);
-                columnCheckBoxDiv.appendChild(columnCheckBoxLabel);
-                selectColumnsElement.appendChild(columnCheckBoxDiv);
-                // checkBoxElement.addEventListener('click', filterTableColumns)
-                columnCheckBoxDiv.classList.add('checkbox-column');
-            }
-        });
-        document.getElementById('cancel').addEventListener('click', closeModal);
-        document.getElementById('confirm').addEventListener('click', filterTableColumns);
-    }, 10);
+    document.getElementById('modal_close').addEventListener('click', closeModal);
+    const columnsList = table.getColumnDefinitions();
+    const selectColumnsElement = document.getElementById('column-list');
+    columnsList.forEach(async (column) => {
+        if (column.title !== 'row') {
+            const columnCheckBoxDiv = document.createElement('div');
+            const columnCheckBoxLabel = document.createElement('label');
+            const description = document.createTextNode(truncateText(column.title, 38));
+            const checkBoxElement = document.createElement('input');
+            columnCheckBoxLabel.setAttribute('for', column.title);
+            checkBoxElement.setAttribute('type', 'checkbox');
+            checkBoxElement.setAttribute('id', column.title);
+            checkBoxElement.setAttribute('name', column.title.replace(' ', ''));
+            checkBoxElement.style.marginRight = '4px';
+            checkBoxElement.checked = true;
+            columnCheckBoxLabel.appendChild(description);
+            columnCheckBoxDiv.appendChild(checkBoxElement);
+            columnCheckBoxDiv.appendChild(columnCheckBoxLabel);
+            selectColumnsElement.appendChild(columnCheckBoxDiv);
+            columnCheckBoxDiv.classList.add('checkbox-column');
+        }
+    });
+    document.getElementById('cancel').addEventListener('click', closeModal);
+    document.getElementById('confirm').addEventListener('click', filterTableColumns);
 }
 
 function closeModal() {
@@ -380,28 +379,117 @@ function closeModal() {
 function showModal() {
     modal.style.visibility = 'visible';
     modal.style.opacity = '1';
+    const list = document.getElementsByTagName('input');
+    for (let i = 0; i < list.length; i++) {
+        list[i].checked = table.getColumn(list[i].id).getVisibility();
+    }
 }
 
 function addButtons() {
-    setTimeout(() => {
-        document.getElementById('button-export').classList.remove('hide');
-        document.getElementById('button-export').addEventListener('click', () => {
-            table.download('csv', 'data.csv');
-        });
-        document.getElementById('button-edit').classList.remove('hide');
-        document.getElementById('button-edit').addEventListener('click', showModal);
-    }, 10);
+    // EXPORT TO CSV BUTTON
+    document.getElementById('button-export').classList.remove('hide');
+    document.getElementById('button-export').addEventListener('click', () => {
+        table.download('csv', 'data.csv');
+    });
+
+    // OPEN EDIT COLUMN MODAL
+    document.getElementById('button-edit').classList.remove('hide');
+    document.getElementById('button-edit').addEventListener('click', showModal);
+
+    // HANDLE PAGINATION
+    handlePagination();
+
+}
+
+function handlePagination() {
+    const currentPageButton = document.getElementById('pagination-page');
+    currentPageButton.innerText = table.getPage();
+    const firstButton = document.getElementById('pagination-first');
+    const prevButton = document.getElementById('pagination-prev');
+    const nextButton = document.getElementById('pagination-next');
+    const lastButton = document.getElementById('pagination-last');
+    setPaginationDetails();
+    changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
+
+    document.getElementById('pagination').classList.remove('hide');
+    firstButton.addEventListener('click', () => {
+        table.setPage(1);
+        currentPageButton.innerText = table.getPage();
+        changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
+        setPaginationDetails();
+    });
+    nextButton.addEventListener('click', () => {
+        table.nextPage();
+        currentPageButton.innerText = table.getPage();
+        changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
+        setPaginationDetails();
+    });
+    prevButton.addEventListener('click', () => {
+        table.previousPage();
+        currentPageButton.innerText = table.getPage();
+        changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
+        setPaginationDetails();
+    });
+    lastButton.addEventListener('click', () => {
+        table.setPage(table.getPageMax());
+        currentPageButton.innerText = table.getPage();
+        changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
+        setPaginationDetails();
+    });
+}
+
+function setPaginationDetails() {
+    const paginationDetails = document.getElementById('pagination-details');
+    if (queryResult.result.length === 1) {
+        paginationDetails.innerText = `Showing 1 entry`;
+    } else {
+        const start = (table.getPage() - 1) * 10 + 1;
+        const end = table.getPage() * 10 > queryResult.result.length ? queryResult.result.length : table.getPage() * 10;
+        paginationDetails.innerText = `Showing ${start} to ${end} of ${queryResult.result.length} entries`;
+    }
+}
+
+function changePaginationButtonState(first, prev, next, last) {
+    if (table.getPage() === 1) {
+        first.classList.add('disabled');
+        first.disabled = true;
+        prev.classList.add('disabled');
+        prev.disabled = true;
+    } else {
+        first.classList.remove('disabled');
+        first.disabled = false;
+        prev.classList.remove('disabled');
+        prev.disabled = false;
+    }
+
+    if (table.getPage() === table.getPageMax()) {
+        next.classList.add('disabled');
+        next.disabled = true;
+        last.classList.add('disabled');
+        last.disabled = true;
+    } else {
+        next.classList.remove('disabled');
+        next.disabled = false;
+        last.classList.remove('disabled');
+        last.disabled = false;
+    }
+}
+
+function alignRightHeaders() {
+    document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
+    headersToAlignRight.forEach(index => {
+        document.querySelectorAll('.tabulator-col-title').item(index).classList.add('align-right');
+    });
 }
 
 function fillDataTable() {
     tableStructure = getTableStructure(schema);
     const tableData = getTableData({...queryResult});
-    console.log(tableData);
-    console.log(tableStructure);
     if (tableData.length === 0) {
         return handleError({body: {message: 'No result was returned.'}});
     }
     loaderElement.classList.remove('active');
+    document.getElementById('container').classList.remove('hide');
     setTableTitle();
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
@@ -415,10 +503,10 @@ function fillDataTable() {
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
         columns: tableStructure,
-        paginationButtonCount: 1,
-        height: 468,
+        height: 482,
         tooltipGenerationMode: 'hover'
     });
+    alignRightHeaders();
     fillModalColumns();
     addButtons();
 }
@@ -441,9 +529,6 @@ async function getQuery() {
 async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
-    if (queryParams.global.close === 'true') {
-        window.close();
-    }
     try {
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;

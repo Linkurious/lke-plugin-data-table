@@ -28,19 +28,18 @@
     <!-- Error -->
     <div class="loader__container hide" id="error">
         <div class="loader__title" id="error_description"></div>
-        <button class="btn__close-tab" id="button-close">CLOSE TAB</button>
     </div>
 </div>
 
 <!--------------------container-------------------->
-<div class="container" id="container">
-    <div class="container__table">
+<div class="container hide" id="container">
+    <div class="container__card">
         <!--------------------Header-------------------->
-        <div id="table_title" class="table--title"></div>
-        <div id="item_type" class="table--item_type"></div>
-        <div id="item_count" class="table--item_count"></div>
+        <div id="table_title" class="table__title"></div>
+        <div id="item_type" class="table__item-type"></div>
+        <div id="item_count" class="table__item-count"></div>
         <div class="warning hide" id="warning">
-            <img class="warning_icon" src="img/Outlined _ AV _ not_interested.png" alt="warning"/>
+            <img class="warning__icon" src="img/Outlined _ AV _ not_interested.png" alt="warning"/>
             <span id="warning_text"></span>
 
         </div>
@@ -51,14 +50,25 @@
 
         <!--------------------Table content-------------------->
         <div id="table" class="table--container"></div>
+        <!-------------------- Pagination-------------------->
+        <div class="pagination hide" id="pagination">
+            <div class="pagination__details" id="pagination-details"></div>
+            <div class="pagination-action">
+                <button id="pagination-first" class="btn__secondary btn">FIRST</button>
+                <button id="pagination-prev" class="btn__secondary pagination__button btn">PREV</button>
+                <button id="pagination-page" class="btn__secondary pagination__button"></button>
+                <button id="pagination-next" class="btn__secondary pagination__button btn">NEXT</button>
+                <button id="pagination-last" class="btn__secondary pagination__button btn">LAST</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <!--------------------modal-------------------->
 <div id="modal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal__title">Table columns</div>
+    <div class="modal__content">
+        <div class="modal__header">
+            <div class="modal__title">TABLE COLUMNS</div>
             <span id="modal_close">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" class="stroke">
           <path d="M61.21 60.5l-52-52m52 0l-52 52"></path>
@@ -69,7 +79,7 @@
         <div class="column-list" id="column-list">
 
         </div>
-        <div class="modal-footer">
+        <div class="modal__footer">
             <button class="btn btn__secondary margin-right__4" id="cancel">Cancel</button>
             <button class="btn btn__primary" id="confirm">Confirm</button>
         </div>

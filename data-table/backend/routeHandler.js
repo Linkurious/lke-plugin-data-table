@@ -70,7 +70,7 @@ module.exports = function configureRoutes(options) {
             res.status(200);
             res.contentType('application/json');
             res.send(JSON.stringify(queryResult));
-        } catch(e) {
+        } catch (e) {
             res.status(400);
             res.contentType('application/json');
             res.send(JSON.stringify({status: 400, body: {error: e.originalResponse.body}}));
@@ -87,5 +87,4 @@ module.exports = function configureRoutes(options) {
         res.contentType('application/json');
         res.send(JSON.stringify(schemaResult));
     });
-
 };
