@@ -84,11 +84,11 @@ async function runQueryByID(query) {
     try {
         const result = await makeRequest(
             'POST',
-            `/plugins/table/api/runQueryByIDPlugin`,
+            `api/runQueryByIDPlugin`,
             {query, queryParams}
         );
         setQueryResult(JSON.parse(result.response));
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 
@@ -186,11 +186,11 @@ async function getSchema() {
     try {
         const result = await makeRequest(
             'GET',
-            `/plugins/table/api/getSchema?sourceKey=${queryParams.global.sourceKey}`,
+            `api/getSchema?sourceKey=${queryParams.global.sourceKey}`,
             null
         );
         setSchema(JSON.parse(result.response));
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 
@@ -200,12 +200,12 @@ async function validatePluginConfiguration() {
     try {
         const result = await makeRequest(
             'POST',
-            `/plugins/table/api/checkPluginsConfiguration`,
+            `api/checkPluginsConfiguration`,
             {results: schema}
         );
         pluginConfiguration = JSON.parse(result.response);
         return true;
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 }
@@ -515,13 +515,13 @@ async function getQuery() {
     try {
         return await makeRequest(
             'POST',
-            `/plugins/table/api/getQuery`,
+            `api/getQuery`,
             {
                 id: queryParams.global.queryId,
                 sourceKey: queryParams.global.sourceKey
             }
         );
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 }
@@ -539,7 +539,7 @@ async function main() {
             await runQueryByID(query);
             fillDataTable();
         }
-    } catch(e) {
+    } catch (e) {
         handleError(e);
     }
 

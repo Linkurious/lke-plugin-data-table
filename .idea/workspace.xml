@@ -19,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1109">
-              <caret line="548" selection-start-line="548" selection-end-line="548" />
+            <state relative-caret-position="237">
+              <caret line="509" column="23" selection-start-line="509" selection-start-column="23" selection-end-line="509" selection-end-column="23" />
               <folding>
                 <element signature="e#314#423#0" />
                 <element signature="e#346#421#0" />
@@ -45,7 +45,7 @@
                 <element signature="e#2170#2299#0" />
                 <element signature="e#2309#2339#0" />
                 <element signature="n#!!doc;n#parseQueryParams#0" />
-                <element signature="e#15905#15980#0" />
+                <element signature="e#15860#15935#0" />
               </folding>
             </state>
           </provider>
@@ -60,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1017">
-              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="1065">
+              <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -73,7 +73,7 @@
         <entry file="file://$PROJECT_DIR$/data-table/public/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="442">
-              <caret line="315" column="1" lean-forward="true" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
+              <caret line="315" column="1" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
               <folding>
                 <element signature="e#11#97#0" />
                 <element signature="e#117#138#0" />
@@ -135,6 +135,7 @@
     <findStrings>
       <find>console</find>
       <find>stop-link</find>
+      <find>makeRequest</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -143,10 +144,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/data-table/public/js/main.js" />
         <option value="$PROJECT_DIR$/data-table/public/index.html" />
         <option value="$PROJECT_DIR$/data-table/public/css/main.css" />
         <option value="$PROJECT_DIR$/data-table/backend/routeHandler.js" />
+        <option value="$PROJECT_DIR$/data-table/public/js/main.js" />
       </list>
     </option>
   </component>
@@ -247,7 +248,7 @@
       <option name="presentableId" value="Default" />
       <updated>1582124343445</updated>
       <workItem from="1582124344881" duration="2939000" />
-      <workItem from="1582277320180" duration="9643000" />
+      <workItem from="1582277320180" duration="11590000" />
     </task>
     <task id="LOCAL-00001" summary="change the ui">
       <created>1582278456238</created>
@@ -267,7 +268,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12582000" />
+    <option name="totallyTimeSpent" value="14529000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1200" height="1920" extended-state="0" />
@@ -284,8 +285,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32988003" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.32988003" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32988003" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32988003" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -303,36 +304,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="filter result" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1109">
-          <caret line="548" selection-start-line="548" selection-end-line="548" />
-          <folding>
-            <element signature="e#314#423#0" />
-            <element signature="e#346#421#0" />
-            <element signature="e#451#628#0" />
-            <element signature="e#527#626#0" />
-            <element signature="n#!!doc;n#makeRequest#0" />
-            <element signature="n#!!block;n#makeRequest#0" />
-            <element signature="e#792#1446#0" />
-            <element signature="e#833#1292#0" />
-            <element signature="e#916#941#0" />
-            <element signature="e#1029#1089#0" />
-            <element signature="e#1095#1286#0" />
-            <element signature="e#1133#1276#0" />
-            <element signature="n#!!doc;n#handleError#0" />
-            <element signature="n#!!block;n#handleError#0" />
-            <element signature="n#!!block;n#setQueryResult#0" />
-            <element signature="e#1892#2303#0" />
-            <element signature="e#2047#2164#0" />
-            <element signature="e#2170#2299#0" />
-            <element signature="e#2309#2339#0" />
-            <element signature="n#!!doc;n#parseQueryParams#0" />
-            <element signature="e#15905#15980#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data-table/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1123">
@@ -343,7 +314,7 @@
     <entry file="file://$PROJECT_DIR$/data-table/public/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
-          <caret line="315" column="1" lean-forward="true" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
+          <caret line="315" column="1" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
           <folding>
             <element signature="e#11#97#0" />
             <element signature="e#117#138#0" />
@@ -400,8 +371,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1017">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        <state relative-caret-position="1065">
+          <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="509" column="23" selection-start-line="509" selection-start-column="23" selection-end-line="509" selection-end-column="23" />
+          <folding>
+            <element signature="e#314#423#0" />
+            <element signature="e#346#421#0" />
+            <element signature="e#451#628#0" />
+            <element signature="e#527#626#0" />
+            <element signature="n#!!doc;n#makeRequest#0" />
+            <element signature="n#!!block;n#makeRequest#0" />
+            <element signature="e#792#1446#0" />
+            <element signature="e#833#1292#0" />
+            <element signature="e#916#941#0" />
+            <element signature="e#1029#1089#0" />
+            <element signature="e#1095#1286#0" />
+            <element signature="e#1133#1276#0" />
+            <element signature="n#!!doc;n#handleError#0" />
+            <element signature="n#!!block;n#handleError#0" />
+            <element signature="n#!!block;n#setQueryResult#0" />
+            <element signature="e#1892#2303#0" />
+            <element signature="e#2047#2164#0" />
+            <element signature="e#2170#2299#0" />
+            <element signature="e#2309#2339#0" />
+            <element signature="n#!!doc;n#parseQueryParams#0" />
+            <element signature="e#15860#15935#0" />
+          </folding>
         </state>
       </provider>
     </entry>
