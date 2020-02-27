@@ -88,7 +88,7 @@ async function runQueryByID(query) {
             {query, queryParams}
         );
         setQueryResult(JSON.parse(result.response));
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 
@@ -106,12 +106,13 @@ function parseQueryParams() {
         const parameter = getParameter(item);
         if (parameter) {
             if (parameter.type === 'global') {
-                result.global[parameter.key] = decodeURIComponent(parameter.value);
+                result.global[decodeURIComponent(parameter.key)] = decodeURIComponent(parameter.value);
             } else if (parameter.type === 'templateField') {
-                result.templateFields[parameter.key] = decodeURIComponent(parameter.value);
+                result.templateFields[decodeURIComponent(parameter.key)] = decodeURIComponent(parameter.value);
             }
         }
     });
+    console.log(result);
     queryParams = result;
 }
 
@@ -190,7 +191,7 @@ async function getSchema() {
             null
         );
         setSchema(JSON.parse(result.response));
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 
@@ -205,7 +206,7 @@ async function validatePluginConfiguration() {
         );
         pluginConfiguration = JSON.parse(result.response);
         return true;
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
@@ -521,7 +522,7 @@ async function getQuery() {
                 sourceKey: queryParams.global.sourceKey
             }
         );
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 }
@@ -539,7 +540,7 @@ async function main() {
             await runQueryByID(query);
             fillDataTable();
         }
-    } catch (e) {
+    } catch(e) {
         handleError(e);
     }
 
