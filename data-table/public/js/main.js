@@ -112,7 +112,6 @@ function parseQueryParams() {
             }
         }
     });
-    console.log(result);
     queryParams = result;
 }
 
@@ -216,7 +215,7 @@ function truncateColumnTitle(cell) {
 }
 
 function truncateFieldValue(cell) {
-    return truncateText(cell.getValue());
+    return truncateText(cell.getValue(), 38);
 }
 
 function truncateText(text = '', maxLength = 50) {
@@ -230,7 +229,7 @@ function truncateText(text = '', maxLength = 50) {
 function getFieldTooltip(cell) {
     if (cell.getValue() && cell.getValue().length > 50) {
         if (cell.getValue().length > 300) {
-            return cell.getValue().slice(0, 299);
+            return `${cell.getValue().slice(0, 299)}...`;
         }
         return cell.getValue();
     }
@@ -298,7 +297,7 @@ function getTableData(queryResult) {
         for (let [key, value] of Object.entries(item.data.properties)) {
             if (typeof value === 'object') {
                 if (value.value && (value.type === 'date' || value.type === 'datetime')) {
-                    item.data.properties[key] = (new Date(value.value)).toISOString();
+                    item.data.properties[key] = formatDate(value.value, value.type === 'datetime');
                 } else {
                     item.data.properties[key] = value.value || value.original;
                 }
@@ -306,6 +305,42 @@ function getTableData(queryResult) {
         }
         return {...item.data.properties, 'id': item.id, 'row': index + 1};
     });
+}
+
+function formatDate(isoString, isDatetime) {
+    // The date received from the server will be always in seconds
+    const dateObject = new Date(isoString);
+
+    if (isNaN(dateObject.getUTCFullYear())) {
+        return null;
+    }
+    let formattedDate =
+        dateObject.getFullYear() +
+        '-' +
+        ((dateObject.getUTCMonth() + 1).toString().length === 1
+            ? '0' + (dateObject.getUTCMonth() + 1)
+            : dateObject.getUTCMonth() + 1) +
+        '-' +
+        (dateObject.getUTCDate().toString().length === 1
+            ? '0' + dateObject.getUTCDate()
+            : dateObject.getUTCDate());
+
+    if (isDatetime) {
+        formattedDate +=
+            ' ' +
+            (dateObject.getUTCHours().toString().length === 1
+                ? '0' + dateObject.getUTCHours()
+                : dateObject.getUTCHours()) +
+            ':' +
+            (dateObject.getUTCMinutes().toString().length === 1
+                ? '0' + dateObject.getUTCMinutes()
+                : dateObject.getUTCMinutes()) +
+            ':' +
+            (dateObject.getUTCSeconds().toString().length === 1
+                ? '0' + dateObject.getUTCSeconds()
+                : dateObject.getUTCSeconds());
+    }
+    return formattedDate;
 }
 
 function getTooltipsHeader(column) {
@@ -504,7 +539,7 @@ function fillDataTable() {
         data: tableData, //assign data to table
         layout: 'fitDataFill', //fit columns to width of table
         columns: tableStructure,
-        height: 482,
+        height: 481,
         tooltipGenerationMode: 'hover'
     });
     alignRightHeaders();

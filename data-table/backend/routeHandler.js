@@ -4,15 +4,13 @@ const bodyParser = require('body-parser');
 module.exports = function configureRoutes(options) {
     options.router.use(bodyParser.json());
 
-    function sanitizeTemplateData(templateFields) {
-        if (templateFields) {
-            if (templateFields.hasOwnProperty('nodeset')) {
-                templateFields['nodeset'] = templateFields['nodeset'].split(',');
-            } else if (templateFields.hasOwnProperty('edgeset')) {
-                templateFields['edgeset'] = templateFields['edgeset'].split(',');
+    function sanitizeTemplateData(templateFieldsParams, templateFieldsQuery) {
+        templateFieldsQuery.forEach(queryParam => {
+            if (queryParam.type === 'nodeset' || queryParam.type === 'edgeset') {
+                templateFieldsParams[queryParam.key] = templateFieldsParams[queryParam.key].split(',');
             }
-        }
-        return templateFields;
+        });
+        return templateFieldsParams;
     }
 
     function checkPluginsConfiguration(schemaTypes, entityType, itemType, properties) {
@@ -57,20 +55,22 @@ module.exports = function configureRoutes(options) {
     });
 
     options.router.post('/runQueryByIDPlugin', async (req, res) => {
+        console.log(req.body);
         const data = {
             id: +req.body.queryParams.global.queryId,
             sourceKey: req.body.queryParams.global.sourceKey,
             limit: +req.body.queryParams.global.limit
         };
         if (req.body.query.templateFields) {
-            data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields);
+            data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields, req.body.query.templateFields);
         }
+        console.log(data);
         try {
             const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
             res.status(200);
             res.contentType('application/json');
             res.send(JSON.stringify(queryResult));
-        } catch (e) {
+        } catch(e) {
             res.status(400);
             res.contentType('application/json');
             res.send(JSON.stringify({status: 400, body: {error: e.originalResponse.body}}));
@@ -79,12 +79,17 @@ module.exports = function configureRoutes(options) {
     });
 
     options.router.get('/getSchema', async (req, res) => {
-        const schemaResult = await options.getRestClient(req).graphSchema.getTypesWithAccess({
-            entityType: options.configuration.entityType || 'node',
-            sourceKey: req.query.sourceKey
-        });
-        res.status(200);
-        res.contentType('application/json');
-        res.send(JSON.stringify(schemaResult));
+        try {
+            const schemaResult = await options.getRestClient(req).graphSchema.getTypesWithAccess({
+                entityType: options.configuration.entityType || 'node',
+                sourceKey: req.query.sourceKey
+            });
+            res.status(200);
+            res.contentType('application/json');
+            res.send(JSON.stringify(schemaResult));
+        } catch(e) {
+            res.status(412);
+            res.send(JSON.stringify({status: 412, body: e}));
+        }
     });
 };
