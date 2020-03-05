@@ -13,5 +13,3 @@ console.log('gunzip:' + gunzip.stdout.toString() + ' / ' + gunzip.stderr.toStrin
 
 const mv = spawnSync( 'mv', [name + '.tar', name + '.lke']);
 console.log('mv:' + mv.stdout.toString() + ' / ' + mv.stderr.toString());
-
-
