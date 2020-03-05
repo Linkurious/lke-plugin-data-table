@@ -1,0 +1,14 @@
+{
+  "name": "data-table",
+  "version": "0.2.1",
+  "description": "Data Table Plugin for Linkurious Enterprise",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p ../builds && npm install && tar -c . > ../builds/data-table.lke"
+  },
+  "author": "Linkurious",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0"
+  }
+}
