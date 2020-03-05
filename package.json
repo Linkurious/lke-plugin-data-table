@@ -4,7 +4,7 @@
   "description": "Data-table plugin for Linkurious Enterprise",
   "main": "index.js",
   "scripts": {
-    "postpack": "scripts/bundle.js"
+    "postpack": "scripts/postpack.js"
   },
   "author": "Linkurious",
   "license": "Apache 2",
