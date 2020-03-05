@@ -3,6 +3,8 @@
 This Linkurious Enterprise plugin allow displaying the result of a
 query (or query template) as a table.
 
+![data-table plugin screenshot](./data-table-screenshot.png)
+
 ## Configuration
 
 These are the configuration keys that need to be set in the plugin
@@ -30,9 +32,9 @@ Full configuration example:
 }
 ```
 
-## Options
+## URL parameters
 
-These are the options that this plugin accepts as URL parameters:
+These are the URL parameters that this plugin accepts:
 
 - `queryId` (**required**, integer): query to run (e.g. `queryId=26`).
 - `sourceKey` (**required**, string): Key of the data-source to run the
