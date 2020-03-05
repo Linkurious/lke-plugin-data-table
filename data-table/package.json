@@ -1,14 +1,23 @@
 {
   "name": "data-table",
   "version": "0.2.1",
-  "description": "Data Table Plugin for Linkurious Enterprise",
+  "description": "Data-table plugin for Linkurious Enterprise",
+
   "main": "index.js",
   "scripts": {
-    "build": "mkdir -p ../builds && npm install && tar -c . > ../builds/data-table.lke"
+    "postpack": "scripts/bundle.js"
   },
   "author": "Linkurious",
-  "license": "ISC",
+  "license": "Apache 2",
+  "files": [
+    "manifest.json",
+    "public",
+    "backend",
+  ],
+  "bundledDependencies": [
+    "body-parser"
+  ],
   "dependencies": {
-    "body-parser": "^1.19.0"
+    "body-parser": "1.19.0"
   }
 }
