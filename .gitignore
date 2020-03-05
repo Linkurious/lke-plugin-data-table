@@ -8,6 +8,8 @@ lerna-debug.log*
 
 **/.idea
 .idea
+
+# our own files
 **.lke
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
