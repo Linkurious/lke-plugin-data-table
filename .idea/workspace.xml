@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5952cbfa-7421-405e-857e-b0cc8ec636f6" name="Default Changelist" comment="filter result">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-table/backend/routeHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/backend/routeHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-table/public/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/public/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-table/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-table/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/data-table/public/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-table/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-table/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-table/.idea/table.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-table/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-table/.idea/workspace.xml" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,34 +21,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1167">
-              <caret line="148" column="9" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
+              <caret line="148" column="5" selection-start-line="148" selection-start-column="5" selection-end-line="148" selection-end-column="5" />
               <folding>
-                <element signature="e#314#423#0" />
-                <element signature="e#346#421#0" />
-                <element signature="e#451#628#0" />
-                <element signature="e#527#626#0" />
                 <element signature="n#!!doc;n#makeRequest#0" />
                 <element signature="n#!!block;n#makeRequest#0" />
-                <element signature="e#792#1446#0" />
-                <element signature="e#833#1292#0" />
-                <element signature="e#916#941#0" />
-                <element signature="e#1029#1089#0" />
-                <element signature="e#1095#1286#0" />
-                <element signature="e#1133#1276#0" />
                 <element signature="n#!!doc;n#handleError#0" />
                 <element signature="n#!!block;n#handleError#0" />
                 <element signature="n#!!block;n#setQueryResult#0" />
-                <element signature="e#1892#2303#0" />
-                <element signature="e#2047#2164#0" />
-                <element signature="e#2170#2299#0" />
-                <element signature="e#2309#2339#0" />
                 <element signature="n#!!doc;n#parseQueryParams#0" />
-                <element signature="e#15923#15998#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -54,7 +50,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1123">
+            <state relative-caret-position="2016">
               <caret line="96" selection-start-line="96" selection-end-line="96" />
             </state>
           </provider>
@@ -63,7 +59,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1065">
+            <state relative-caret-position="1260">
               <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
             </state>
           </provider>
@@ -72,59 +68,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data-table/public/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
+            <state relative-caret-position="6615">
               <caret line="315" column="1" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
-              <folding>
-                <element signature="e#11#97#0" />
-                <element signature="e#117#138#0" />
-                <element signature="e#499#530#0" />
-                <element signature="e#548#727#0" />
-                <element signature="e#741#825#0" />
-                <element signature="e#841#1016#0" />
-                <element signature="e#1122#1204#0" />
-                <element signature="e#1221#1421#0" />
-                <element signature="e#1440#1703#0" />
-                <element signature="e#1713#1816#0" />
-                <element signature="e#1836#1940#0" />
-                <element signature="e#1958#2214#0" />
-                <element signature="e#2226#2313#0" />
-                <element signature="e#2315#2422#0" />
-                <element signature="e#2344#2378#0" />
-                <element signature="e#2384#2420#0" />
-                <element signature="e#2529#2657#0" />
-                <element signature="e#2677#2767#0" />
-                <element signature="e#2788#2878#0" />
-                <element signature="e#2889#3049#0" />
-                <element signature="e#3066#3175#0" />
-                <element signature="e#3177#3257#0" />
-                <element signature="e#3278#3364#0" />
-                <element signature="e#3487#3909#0" />
-                <element signature="e#3947#4091#0" />
-                <element signature="e#4108#4177#0" />
-                <element signature="e#4193#4275#0" />
-                <element signature="e#4290#4372#0" />
-                <element signature="e#4391#4433#0" />
-                <element signature="e#4450#4556#0" />
-                <element signature="e#4575#4599#0" />
-                <element signature="e#4626#4754#0" />
-                <element signature="e#4767#4802#0" />
-                <element signature="e#4833#4855#0" />
-                <element signature="e#4877#4964#0" />
-                <element signature="e#5076#5152#0" />
-                <element signature="e#5170#5298#0" />
-                <element signature="e#5315#5358#0" />
-                <element signature="e#5375#5421#0" />
-                <element signature="e#5452#5495#0" />
-                <element signature="e#5516#5715#0" />
-                <element signature="e#5733#5951#0" />
-                <element signature="e#5974#6005#0" />
-                <element signature="e#6024#6051#0" />
-                <element signature="e#6066#6088#0" />
-                <element signature="e#6203#6328#0" />
-                <element signature="e#6351#6412#0" />
-                <element signature="e#6424#6442#0" />
-                <element signature="e#6460#6506#0" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -140,7 +85,7 @@
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="SYNC" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/data-table" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -149,6 +94,7 @@
         <option value="$PROJECT_DIR$/data-table/public/css/main.css" />
         <option value="$PROJECT_DIR$/data-table/backend/routeHandler.js" />
         <option value="$PROJECT_DIR$/data-table/public/js/main.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -162,7 +108,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="x" value="1440" />
     <option name="width" value="1200" />
     <option name="height" value="1920" />
@@ -173,6 +119,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -180,42 +127,10 @@
               <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="data-table" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="data-table" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="data-table" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="data-table" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lke-plugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lke-plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="data-table" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -250,6 +165,7 @@
       <updated>1582124343445</updated>
       <workItem from="1582124344881" duration="2939000" />
       <workItem from="1582277320180" duration="13166000" />
+      <workItem from="1583404734457" duration="806000" />
     </task>
     <task id="LOCAL-00001" summary="change the ui">
       <created>1582278456238</created>
@@ -269,10 +185,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16105000" />
+    <option name="totallyTimeSpent" value="16911000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1440" y="0" width="1200" height="1920" extended-state="0" />
+    <frame x="1440" y="-464" width="1200" height="1920" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24936387" />
@@ -286,8 +202,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32988003" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.11286805" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32988003" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.11286805" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -305,105 +221,46 @@
     <option name="LAST_COMMIT_MESSAGE" value="filter result" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1167">
+          <caret line="148" column="5" selection-start-line="148" selection-start-column="5" selection-end-line="148" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!doc;n#makeRequest#0" />
+            <element signature="n#!!block;n#makeRequest#0" />
+            <element signature="n#!!doc;n#handleError#0" />
+            <element signature="n#!!block;n#handleError#0" />
+            <element signature="n#!!block;n#setQueryResult#0" />
+            <element signature="n#!!doc;n#parseQueryParams#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data-table/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1123">
+        <state relative-caret-position="2016">
           <caret line="96" selection-start-line="96" selection-end-line="96" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data-table/backend/routeHandler.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1065">
+        <state relative-caret-position="1260">
           <caret line="60" column="19" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data-table/public/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
+        <state relative-caret-position="6615">
           <caret line="315" column="1" selection-start-line="315" selection-start-column="1" selection-end-line="315" selection-end-column="1" />
-          <folding>
-            <element signature="e#11#97#0" />
-            <element signature="e#117#138#0" />
-            <element signature="e#499#530#0" />
-            <element signature="e#548#727#0" />
-            <element signature="e#741#825#0" />
-            <element signature="e#841#1016#0" />
-            <element signature="e#1122#1204#0" />
-            <element signature="e#1221#1421#0" />
-            <element signature="e#1440#1703#0" />
-            <element signature="e#1713#1816#0" />
-            <element signature="e#1836#1940#0" />
-            <element signature="e#1958#2214#0" />
-            <element signature="e#2226#2313#0" />
-            <element signature="e#2315#2422#0" />
-            <element signature="e#2344#2378#0" />
-            <element signature="e#2384#2420#0" />
-            <element signature="e#2529#2657#0" />
-            <element signature="e#2677#2767#0" />
-            <element signature="e#2788#2878#0" />
-            <element signature="e#2889#3049#0" />
-            <element signature="e#3066#3175#0" />
-            <element signature="e#3177#3257#0" />
-            <element signature="e#3278#3364#0" />
-            <element signature="e#3487#3909#0" />
-            <element signature="e#3947#4091#0" />
-            <element signature="e#4108#4177#0" />
-            <element signature="e#4193#4275#0" />
-            <element signature="e#4290#4372#0" />
-            <element signature="e#4391#4433#0" />
-            <element signature="e#4450#4556#0" />
-            <element signature="e#4575#4599#0" />
-            <element signature="e#4626#4754#0" />
-            <element signature="e#4767#4802#0" />
-            <element signature="e#4833#4855#0" />
-            <element signature="e#4877#4964#0" />
-            <element signature="e#5076#5152#0" />
-            <element signature="e#5170#5298#0" />
-            <element signature="e#5315#5358#0" />
-            <element signature="e#5375#5421#0" />
-            <element signature="e#5452#5495#0" />
-            <element signature="e#5516#5715#0" />
-            <element signature="e#5733#5951#0" />
-            <element signature="e#5974#6005#0" />
-            <element signature="e#6024#6051#0" />
-            <element signature="e#6066#6088#0" />
-            <element signature="e#6203#6328#0" />
-            <element signature="e#6351#6412#0" />
-            <element signature="e#6424#6442#0" />
-            <element signature="e#6460#6506#0" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data-table/public/js/main.js">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1167">
-          <caret line="148" column="9" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
-          <folding>
-            <element signature="e#314#423#0" />
-            <element signature="e#346#421#0" />
-            <element signature="e#451#628#0" />
-            <element signature="e#527#626#0" />
-            <element signature="n#!!doc;n#makeRequest#0" />
-            <element signature="n#!!block;n#makeRequest#0" />
-            <element signature="e#792#1446#0" />
-            <element signature="e#833#1292#0" />
-            <element signature="e#916#941#0" />
-            <element signature="e#1029#1089#0" />
-            <element signature="e#1095#1286#0" />
-            <element signature="e#1133#1276#0" />
-            <element signature="n#!!doc;n#handleError#0" />
-            <element signature="n#!!block;n#handleError#0" />
-            <element signature="n#!!block;n#setQueryResult#0" />
-            <element signature="e#1892#2303#0" />
-            <element signature="e#2047#2164#0" />
-            <element signature="e#2170#2299#0" />
-            <element signature="e#2309#2339#0" />
-            <element signature="n#!!doc;n#parseQueryParams#0" />
-            <element signature="e#15923#15998#0" />
-          </folding>
+        <state relative-caret-position="189">
+          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
         </state>
       </provider>
     </entry>
