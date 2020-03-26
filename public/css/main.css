@@ -111,7 +111,6 @@ body {
     position: static;
     margin: 0;
     visibility: visible;
-    opacity: 1;
 }
 
 .spinner:before {
@@ -184,12 +183,6 @@ body {
     border-radius: 100px;
     margin-right: 20px;
 }
-
-/*.warning_img {
-  height: 16px;
-  width: 16px;
-  background-color: #FFFFFF;
-}*/
 
 .button__container {
     display: flex;
@@ -303,10 +296,6 @@ svg.stroke {
     background-color: #FAFAFA !important;
     border-radius: 4px !important;
 }
-
-/*.tabulator-row:last-child .tabulator-cell {
-  border-bottom: none !important;
-}*/
 
 .tabulator-cell {
     height: 44px;

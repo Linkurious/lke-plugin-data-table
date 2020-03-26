@@ -4,6 +4,12 @@ const bodyParser = require('body-parser');
 module.exports = function configureRoutes(options) {
     options.router.use(bodyParser.json());
 
+    /**
+     * sanitize the templateData attribute for runQueryByID parameter
+     * @param templateFieldsParams
+     * @param templateFieldsQuery
+     * @returns {*}
+     */
     function sanitizeTemplateData(templateFieldsParams, templateFieldsQuery) {
         templateFieldsQuery.forEach(queryParam => {
             if (queryParam.type === 'nodeset' || queryParam.type === 'edgeset') {
@@ -13,6 +19,14 @@ module.exports = function configureRoutes(options) {
         return templateFieldsParams;
     }
 
+    /**
+     * check if the plugin configuration is valid
+     * @param schemaTypes
+     * @param entityType
+     * @param itemType
+     * @param properties
+     * @returns {{message: string}|{message: string}|{message: string}|null|{message: string}}
+     */
     function checkPluginsConfiguration(schemaTypes, entityType, itemType, properties) {
         if (entityType && entityType !== 'node' && entityType !== 'edge') {
             return {message: 'Invalid plugin configuration “entityType” (must be “node” or “edge”)'};
@@ -55,7 +69,6 @@ module.exports = function configureRoutes(options) {
     });
 
     options.router.post('/runQueryByIDPlugin', async (req, res) => {
-        console.log(req.body);
         const data = {
             id: +req.body.queryParams.global.queryId,
             sourceKey: req.body.queryParams.global.sourceKey,
@@ -64,16 +77,16 @@ module.exports = function configureRoutes(options) {
         if (req.body.query.templateFields) {
             data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields, req.body.query.templateFields);
         }
-        console.log(data);
         try {
             const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
             res.status(200);
             res.contentType('application/json');
             res.send(JSON.stringify(queryResult));
-        } catch(e) {
+        } catch (e) {
             res.status(400);
             res.contentType('application/json');
-            res.send(JSON.stringify({status: 400, body: {error: e.originalResponse.body}}));
+            const error = e.originalResponse.body ? e.originalResponse.body : e;
+            res.send(JSON.stringify({status: 400, body: {error}}));
         }
 
     });
@@ -87,7 +100,7 @@ module.exports = function configureRoutes(options) {
             res.status(200);
             res.contentType('application/json');
             res.send(JSON.stringify(schemaResult));
-        } catch(e) {
+        } catch (e) {
             res.status(412);
             res.send(JSON.stringify({status: 412, body: e}));
         }

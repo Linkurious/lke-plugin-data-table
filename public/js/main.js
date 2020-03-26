@@ -8,25 +8,29 @@ let pluginConfiguration;
 const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
 const modal = document.getElementById('modal');
-document.getElementById('body').addEventListener('click', () => {
+
+// close the edit columns modal when clicking outside of it
+document.querySelector('body').addEventListener('click', () => {
     if (event.target === modal) {
-        modal.style.visibility = 'hidden';
-        modal.style.opacity = '0';
+        closeModal();
     }
 });
-
+// close the edit columns modal when escape key is pressed
 window.onkeyup = (e) => {
     if (
         e.key === 'Escape' && modal.style.visibility === 'visible'
     ) {
         e.preventDefault();
-        modal.style.visibility = 'hidden';
-        modal.style.opacity = '0';
+        closeModal();
     }
 };
 
 /**
  * make XMLHttpRequest
+ * @param verb : string  default value 'GET'
+ * @param url : string   API end point
+ * @param body : Object
+ * @returns {Promise<any>}
  */
 function makeRequest(verb = 'GET', url, body) {
     const xmlHttp = new XMLHttpRequest();
@@ -57,7 +61,7 @@ function makeRequest(verb = 'GET', url, body) {
 
 /**
  * Handle request errors
- * @param event
+ * @param event : Object
  */
 function handleError(event) {
     document.getElementById('error_description').innerText = event.body.message;
@@ -67,6 +71,10 @@ function handleError(event) {
     throw Error(event.body.message);
 }
 
+/**
+ * set queryResult value
+ * @param result : Object
+ */
 function setQueryResult(result) {
     if (result.status === 200) {
         queryResult = {truncatedByLimit: result.body.truncatedByLimit};
@@ -80,6 +88,11 @@ function setQueryResult(result) {
     }
 }
 
+/**
+ * make a request to run the query
+ * @param query : Object query configuration
+ * @returns {Promise<void>}
+ */
 async function runQueryByID(query) {
     try {
         const result = await makeRequest(
@@ -149,11 +162,15 @@ function getParameter(item) {
     }
 }
 
+/**
+ * check if the query template fields are valid
+ * @param query
+ */
 function validateTemplateFieldsParams(query) {
     if (query.templateFields && query.templateFields.length > 0) {
         query.templateFields.forEach(template => {
             if (queryParams.templateFields.hasOwnProperty(template.key)) {
-                if (template.type === 'number' && isNaN(+queryParams.templateFields[template.key])) {
+                if (template.type === 'number' && !isFinite(+queryParams.templateFields[template.key])) {
                     return handleError({body: {message: `Invalid URL parameter “${template.key}” (it must be a number)`}});
                 }
             } else {
@@ -163,6 +180,11 @@ function validateTemplateFieldsParams(query) {
     }
 }
 
+/**
+ * validate the global query params : queryID, sourceKey
+ * @param params
+ * @returns {boolean|void}
+ */
 function validateGlobalQueryParams(params) {
     if (params.queryId === undefined) {
         return handleError({body: {message: 'Missing URL parameter “query_id”'}});
@@ -174,6 +196,10 @@ function validateGlobalQueryParams(params) {
     return true;
 }
 
+/**
+ * set the schema
+ * @param result
+ */
 function setSchema(result) {
     if (result.status === 200) {
         schema = result.body.results;
@@ -182,6 +208,10 @@ function setSchema(result) {
     }
 }
 
+/**
+ * make a request to get the schema
+ * @returns {Promise<void>}
+ */
 async function getSchema() {
     try {
         const result = await makeRequest(
@@ -196,6 +226,10 @@ async function getSchema() {
 
 }
 
+/**
+ * make a request to validate the plugin configuration
+ * @returns {Promise<boolean>}
+ */
 async function validatePluginConfiguration() {
     try {
         const result = await makeRequest(
@@ -210,14 +244,21 @@ async function validatePluginConfiguration() {
     }
 }
 
-function truncateColumnTitle(cell) {
+/**
+ * check the length of the table text and truncate it if is longer than 38
+ * @param cell
+ * @returns {string}
+ */
+function truncateTableText(cell) {
     return truncateText(cell.getValue(), 38);
 }
 
-function truncateFieldValue(cell) {
-    return truncateText(cell.getValue(), 38);
-}
-
+/**
+ * take a string and max length  and truncate the text if it'length is longer
+ * @param text : string
+ * @param maxLength : number
+ * @returns {string}
+ */
 function truncateText(text = '', maxLength = 50) {
     if (text.length > maxLength) {
         return `${text.slice(0, maxLength - 2)}...`;
@@ -226,16 +267,23 @@ function truncateText(text = '', maxLength = 50) {
     }
 }
 
+/**
+ * return the text to show in the tooltip
+ * @param cell
+ * @returns {string|boolean|*|string}
+ */
 function getFieldTooltip(cell) {
     if (cell.getValue() && cell.getValue().length > 50) {
-        if (cell.getValue().length > 300) {
-            return `${cell.getValue().slice(0, 299)}...`;
-        }
-        return cell.getValue();
+        truncateText(cell.getValue(), 300);
     }
     return false;
 }
 
+/**
+ * filter the schema to include only the configured properties
+ * @param schemaStructure
+ * @returns {Array}
+ */
 function getFilteredSchema(schemaStructure) {
     const properties = schemaStructure.find(item => item.itemType === pluginConfiguration.itemType).properties || [];
     let sortedProperties = [];
@@ -252,6 +300,13 @@ function getFilteredSchema(schemaStructure) {
     return sortedProperties;
 }
 
+/**
+ * take an array of value or object and sorted alphabetically
+ * if it is an object sorted by checking the objKey value
+ * @param arr
+ * @param objKey
+ * @returns {*}
+ */
 function sortAlphabetically(arr, objKey) {
     return arr.sort((a, b) => {
         const aK = objKey ? a[objKey] : a;
@@ -262,6 +317,11 @@ function sortAlphabetically(arr, objKey) {
     });
 }
 
+/**
+ * return the structure of the table
+ * @param schemaStructure
+ * @returns {*[]}
+ */
 function getTableStructure(schemaStructure) {
     const properties = getFilteredSchema(schemaStructure);
     const sanitizedData = properties.map((property, index) => {
@@ -279,9 +339,9 @@ function getTableStructure(schemaStructure) {
             title: property.propertyKey,
             field: property.propertyKey,
             align: align,
-            titleFormatter: truncateColumnTitle,
+            titleFormatter: truncateTableText,
             headerSort: false,
-            formatter: truncateFieldValue,
+            formatter: truncateTableText,
             tooltip: getFieldTooltip
         };
     });
@@ -292,6 +352,11 @@ function getTableStructure(schemaStructure) {
     ];
 }
 
+/**
+ * get the data that will be printed in the table
+ * @param queryResult
+ * @returns {*}
+ */
 function getTableData(queryResult) {
     return queryResult.result.map((item, index) => {
         for (let [key, value] of Object.entries(item.data.properties)) {
@@ -307,6 +372,12 @@ function getTableData(queryResult) {
     });
 }
 
+/**
+ * format date to readable ISO format
+ * @param isoString
+ * @param isDatetime
+ * @returns {string|null}
+ */
 function formatDate(isoString, isDatetime) {
     // The date received from the server will be always in seconds
     const dateObject = new Date(isoString);
@@ -343,6 +414,11 @@ function formatDate(isoString, isDatetime) {
     return formattedDate;
 }
 
+/**
+ * return the tooltips of columns header
+ * @param column
+ * @returns {boolean|*}
+ */
 function getTooltipsHeader(column) {
     if (column.getDefinition().title && column.getDefinition().title.length * 8 > 300) {
         return column.getDefinition().title;
@@ -350,7 +426,10 @@ function getTooltipsHeader(column) {
     return false;
 }
 
-function setTableTitle() {
+/**
+ * set the table Header in the view
+ */
+function setTableHeader() {
     if (queryResult.truncatedByLimit && queryParams.global.limit === undefined) {
         document.getElementById('warning').classList.remove('hide');
     }
@@ -368,6 +447,9 @@ function setTableTitle() {
     }
 }
 
+/**
+ * filter table columns
+ */
 function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
@@ -380,6 +462,9 @@ function filterTableColumns() {
     closeModal();
 }
 
+/**
+ * create a checkbox list with the table columns
+ */
 function fillModalColumns() {
     document.getElementById('modal_close').addEventListener('click', closeModal);
     const columnsList = table.getColumnDefinitions();
@@ -407,11 +492,17 @@ function fillModalColumns() {
     document.getElementById('confirm').addEventListener('click', filterTableColumns);
 }
 
+/**
+ * close tha edit columns modal
+ */
 function closeModal() {
     modal.style.visibility = 'hidden';
     modal.style.opacity = '0';
 }
 
+/**
+ * open the edit columns modal
+ */
 function showModal() {
     modal.style.visibility = 'visible';
     modal.style.opacity = '1';
@@ -421,15 +512,16 @@ function showModal() {
     }
 }
 
+/**
+ * add the different buttons to the view and init actions
+ */
 function addButtons() {
     // EXPORT TO CSV BUTTON
-    document.getElementById('button-export').classList.remove('hide');
     document.getElementById('button-export').addEventListener('click', () => {
         table.download('csv', 'data.csv');
     });
 
     // OPEN EDIT COLUMN MODAL
-    document.getElementById('button-edit').classList.remove('hide');
     document.getElementById('button-edit').addEventListener('click', showModal);
 
     // HANDLE PAGINATION
@@ -437,6 +529,9 @@ function addButtons() {
 
 }
 
+/**
+ * handle table pagination actions
+ */
 function handlePagination() {
     const currentPageButton = document.getElementById('pagination-page');
     currentPageButton.innerText = table.getPage();
@@ -447,7 +542,6 @@ function handlePagination() {
     setPaginationDetails();
     changePaginationButtonState(firstButton, prevButton, nextButton, lastButton);
 
-    document.getElementById('pagination').classList.remove('hide');
     firstButton.addEventListener('click', () => {
         table.setPage(1);
         currentPageButton.innerText = table.getPage();
@@ -474,6 +568,9 @@ function handlePagination() {
     });
 }
 
+/**
+ * adding the pagination details to the view
+ */
 function setPaginationDetails() {
     const paginationDetails = document.getElementById('pagination-details');
     if (queryResult.result.length === 1) {
@@ -485,6 +582,13 @@ function setPaginationDetails() {
     }
 }
 
+/**
+ * check if buttons should be enabled or disabled
+ * @param first
+ * @param prev
+ * @param next
+ * @param last
+ */
 function changePaginationButtonState(first, prev, next, last) {
     if (table.getPage() === 1) {
         first.classList.add('disabled');
@@ -511,6 +615,9 @@ function changePaginationButtonState(first, prev, next, last) {
     }
 }
 
+/**
+ * align the columns header title to the right
+ */
 function alignRightHeaders() {
     document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
     headersToAlignRight.forEach(index => {
@@ -518,6 +625,9 @@ function alignRightHeaders() {
     });
 }
 
+/**
+ * create the date table by creating a Tabulator object
+ */
 function fillDataTable() {
     tableStructure = getTableStructure(schema);
     const tableData = getTableData({...queryResult});
@@ -526,7 +636,7 @@ function fillDataTable() {
     }
     loaderElement.classList.remove('active');
     document.getElementById('container').classList.remove('hide');
-    setTableTitle();
+    setTableHeader();
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
         tooltipsHeader: getTooltipsHeader,
@@ -547,6 +657,10 @@ function fillDataTable() {
     addButtons();
 }
 
+/**
+ * get query configuration
+ * @returns {Promise<any>}
+ */
 async function getQuery() {
     try {
         return await makeRequest(
@@ -562,6 +676,10 @@ async function getQuery() {
     }
 }
 
+/**
+ * start the plugin table
+ * @returns {Promise<void>}
+ */
 async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
