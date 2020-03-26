@@ -119,9 +119,9 @@ function parseQueryParams() {
         const parameter = getParameter(item);
         if (parameter) {
             if (parameter.type === 'global') {
-                result.global[decodeURIComponent(parameter.key)] = decodeURIComponent(parameter.value);
+                result.global[decodeURIComponent(parameter.key)] = parameter.value;
             } else if (parameter.type === 'templateField') {
-                result.templateFields[decodeURIComponent(parameter.key)] = decodeURIComponent(parameter.value);
+                result.templateFields[decodeURIComponent(parameter.key)] = parameter.value;
             }
         }
     });
@@ -145,17 +145,18 @@ function getParameter(item) {
             'param_string_'
         ]
     };
+    const decodedValue = decodeURIComponent(item[1]);
     if (allowedParams.oneOf.includes(item[0])) {
-        return {key: item[0], value: item[1], type: 'global'};
+        return {key: item[0], value: decodedValue, type: 'global'};
     } else {
         const prefix = allowedParams.startWith.find((prefix) => item[0].startsWith(prefix));
         switch (prefix) {
             case  'param_number_':
-                return {key: item[0].replace('param_number_', ''), value: +item[1], type: 'templateField'};
+                return {key: item[0].replace('param_number_', ''), value: +decodedValue, type: 'templateField'};
             case  'param_ids_':
-                return {key: item[0].replace('param_ids_', ''), value: item[1], type: 'templateField'};
+                return {key: item[0].replace('param_ids_', ''), value: decodedValue, type: 'templateField'};
             case  'param_string_':
-                return {key: item[0].replace('param_string_', ''), value: item[1], type: 'templateField'};
+                return {key: item[0].replace('param_string_', ''), value: decodedValue, type: 'templateField'};
             default:
                 return false;
         }
