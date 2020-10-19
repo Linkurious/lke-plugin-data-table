@@ -4,6 +4,7 @@ let tableStructure;
 let schema;
 let table;
 let query;
+let isTruncated;
 let pluginConfiguration;
 const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
@@ -137,7 +138,8 @@ function getParameter(item) {
         oneOf: [
             'sourceKey',
             'limit',
-            'queryId'
+            'queryId',
+            'truncated'
         ],
         startWith: [
             'param_number_',
@@ -251,7 +253,7 @@ async function validatePluginConfiguration() {
  * @returns {string}
  */
 function truncateTableText(cell) {
-    return truncateText(cell.getValue(), 38);
+    return truncateText(cell.getValue(), isTruncated ? 38 : Infinity);
 }
 
 /**
@@ -677,6 +679,16 @@ async function getQuery() {
     }
 }
 
+function parseBool(val)
+{
+    if ((typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'yes')) || val === 1)
+        return true;
+    else if ((typeof val === 'string' && (val.toLowerCase() === 'false' || val.toLowerCase() === 'no')) || val === 0)
+        return false;
+
+    return true;
+}
+
 /**
  * start the plugin table
  * @returns {Promise<void>}
@@ -685,6 +697,7 @@ async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
     try {
+        isTruncated = parseBool(queryParams.global.truncated);
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;
         validateTemplateFieldsParams(query);
