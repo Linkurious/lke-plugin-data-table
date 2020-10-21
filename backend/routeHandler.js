@@ -13,7 +13,8 @@ module.exports = function configureRoutes(options) {
     function sanitizeTemplateData(templateFieldsParams, templateFieldsQuery) {
         templateFieldsQuery.forEach(queryParam => {
             if (queryParam.type === 'nodeset' || queryParam.type === 'edgeset') {
-                templateFieldsParams[queryParam.key] = templateFieldsParams[queryParam.key].split(',');
+                const regExpStr = new RegExp('(?!<(?:\\(|\\[)[^)\\]]+),(?![^(\\[]+(?:\\)|\\]))', 'g');
+                templateFieldsParams[queryParam.key] = templateFieldsParams[queryParam.key].split(regExpStr);
             }
         });
         return templateFieldsParams;
