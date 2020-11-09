@@ -1,7 +1,6 @@
 {
   "name": "data-table",
   "version": "1.0.1",
-  "linkuriousVersion": "2.9.0",
   "pluginApiVersion": "1.0.0",
   "publicRoute": "public",
   "singlePageAppIndex": "index.html",
