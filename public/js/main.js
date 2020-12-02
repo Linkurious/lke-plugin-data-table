@@ -338,7 +338,8 @@ function getTableStructure(schemaStructure) {
         }
         return {
             title: property.propertyKey,
-            field: property.propertyKey,
+            // replace to avoid error in Tabulator
+            field: property.propertyKey.replace(/\./g, 'dot'),
             align: align,
             titleFormatter: truncateTableText,
             headerSort: false,
@@ -367,6 +368,12 @@ function getTableData(queryResult) {
                 } else {
                     item.data.properties[key] = value.value || value.original;
                 }
+            }
+            // If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+            if (key.includes('.')) {
+                Object.defineProperty(item.data.properties, key.replace(/\./g, 'dot'),
+                    Object.getOwnPropertyDescriptor(item.data.properties, key));
+                delete item.data.properties[key];
             }
         }
         return {...item.data.properties, 'id': item.id, 'row': index + 1};
