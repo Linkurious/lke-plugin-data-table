@@ -462,9 +462,11 @@ function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
-            table.showColumn(list[i].id);
+            // replace . by 'dot' to avoid bug in Tabulator
+            table.showColumn(list[i].id.replace(/\./g, 'dot'));
         } else {
-            table.hideColumn(list[i].id);
+            // replace . by 'dot' to avoid bug in Tabulator
+            table.hideColumn(list[i].id.replace(/\./g, 'dot'));
         }
     }
     closeModal();
@@ -516,7 +518,8 @@ function showModal() {
     modal.style.opacity = '1';
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
-        list[i].checked = table.getColumn(list[i].id).getVisibility();
+        // replace . by 'dot' to avoid bug in Tabulator
+        list[i].checked = table.getColumn(list[i].id.replace(/\./g, 'dot')).getVisibility();
     }
 }
 
