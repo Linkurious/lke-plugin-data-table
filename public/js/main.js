@@ -338,8 +338,7 @@ function getTableStructure(schemaStructure) {
         }
         return {
             title: property.propertyKey,
-            // replace to avoid error in Tabulator
-            field: property.propertyKey.replace(/\./g, 'dot'),
+            field: escapeDotCharacters(property.propertyKey),
             align: align,
             titleFormatter: truncateTableText,
             headerSort: false,
@@ -369,9 +368,8 @@ function getTableData(queryResult) {
                     item.data.properties[key] = value.value || value.original;
                 }
             }
-            // If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
             if (key.includes('.')) {
-                Object.defineProperty(item.data.properties, key.replace(/\./g, 'dot'),
+                Object.defineProperty(item.data.properties, escapeDotCharacters(key),
                     Object.getOwnPropertyDescriptor(item.data.properties, key));
                 delete item.data.properties[key];
             }
@@ -462,11 +460,9 @@ function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
-            // replace . by 'dot' to avoid bug in Tabulator
-            table.showColumn(list[i].id.replace(/\./g, 'dot'));
+            table.showColumn(escapeDotCharacters(list[i].id));
         } else {
-            // replace . by 'dot' to avoid bug in Tabulator
-            table.hideColumn(list[i].id.replace(/\./g, 'dot'));
+            table.hideColumn(escapeDotCharacters(list[i].id));
         }
     }
     closeModal();
@@ -518,8 +514,7 @@ function showModal() {
     modal.style.opacity = '1';
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
-        // replace . by 'dot' to avoid bug in Tabulator
-        list[i].checked = table.getColumn(list[i].id.replace(/\./g, 'dot')).getVisibility();
+        list[i].checked = table.getColumn(escapeDotCharacters(list[i].id)).getVisibility();
     }
 }
 
@@ -666,6 +661,14 @@ function fillDataTable() {
     alignRightHeaders();
     fillModalColumns();
     addButtons();
+}
+
+/**
+ * If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+ * @param {string} value 
+ */
+function escapeDotCharacters(value) {
+    return value.replace(/\./g, 'dot');
 }
 
 /**
