@@ -338,7 +338,7 @@ function getTableStructure(schemaStructure) {
         }
         return {
             title: property.propertyKey,
-            field: property.propertyKey,
+            field: escapeDotCharacters(property.propertyKey),
             align: align,
             titleFormatter: truncateTableText,
             headerSort: false,
@@ -367,6 +367,12 @@ function getTableData(queryResult) {
                 } else {
                     item.data.properties[key] = value.value || value.original;
                 }
+            }
+            // If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+            if (key.includes('.')) {
+                Object.defineProperty(item.data.properties, escapeDotCharacters(key),
+                    Object.getOwnPropertyDescriptor(item.data.properties, key));
+                delete item.data.properties[key];
             }
         }
         return {...item.data.properties, 'id': item.id, 'row': index + 1};
@@ -455,9 +461,9 @@ function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
-            table.showColumn(list[i].id);
+            table.showColumn(escapeDotCharacters(list[i].id));
         } else {
-            table.hideColumn(list[i].id);
+            table.hideColumn(escapeDotCharacters(list[i].id));
         }
     }
     closeModal();
@@ -509,7 +515,7 @@ function showModal() {
     modal.style.opacity = '1';
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
-        list[i].checked = table.getColumn(list[i].id).getVisibility();
+        list[i].checked = table.getColumn(escapeDotCharacters(list[i].id)).getVisibility();
     }
 }
 
@@ -656,6 +662,14 @@ function fillDataTable() {
     alignRightHeaders();
     fillModalColumns();
     addButtons();
+}
+
+/**
+ * If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+ * @param {string} value 
+ */
+function escapeDotCharacters(value) {
+    return value.replace(/\./g, 'dot');
 }
 
 /**
