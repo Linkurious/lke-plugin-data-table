@@ -368,6 +368,7 @@ function getTableData(queryResult) {
                     item.data.properties[key] = value.value || value.original;
                 }
             }
+            // If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
             if (key.includes('.')) {
                 Object.defineProperty(item.data.properties, escapeDotCharacters(key),
                     Object.getOwnPropertyDescriptor(item.data.properties, key));
