@@ -14,7 +14,7 @@
   "author": "Linkurious",
   "scripts": {
     "lint": "eslint --fix  .",
-    "lint:ci": "eslint -f checkstyle -o reports/checkstyle.xml  .",
+    "lint:ci-deactivated": "eslint -f checkstyle -o reports/checkstyle.xml  .",
     "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-*.tgz > linkurious-lke-plugin-data-table.lke",
     "plugin:tar": "scripts/postpack.js"
   },
