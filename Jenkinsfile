@@ -10,7 +10,7 @@ nodeJob {
 
   //static asset upload
   runPrivateNpmPublish = false
-  binaries = ["linkurious-lke-plugin-data-table.lke"]
+  binaries = ["lke-plugin-data-table.lke"]
   groupId = 'com.linkurious.plugins'
 
 }
