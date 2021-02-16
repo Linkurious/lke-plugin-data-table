@@ -12,12 +12,12 @@
     "url": "git+https://github.com/Linkurious/lke-plugin-data-table.git"
   },
   "author": "Linkurious",
-  "license": "MIT",
   "scripts": {
+    "lint": "eslint --fix  .",
+    "lint:ci": "eslint -f checkstyle -o reports/checkstyle.xml  .",
     "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-*.tgz > linkurious-lke-plugin-data-table.lke",
     "plugin:tar": "scripts/postpack.js"
   },
-  "author": "Linkurious",
   "license": "Apache 2",
   "files": [
     "manifest.json",
@@ -29,5 +29,8 @@
   ],
   "dependencies": {
     "body-parser": "1.19.0"
+  },
+  "devDependencies": {
+    "eslint": "7.20.0"
   }
 }
