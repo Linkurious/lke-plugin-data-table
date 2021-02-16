@@ -14,6 +14,7 @@
   "author": "Linkurious",
   "license": "MIT",
   "scripts": {
+    "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-*.tgz > linkurious-lke-plugin-data-table.lke",
     "plugin:tar": "scripts/postpack.js"
   },
   "author": "Linkurious",
