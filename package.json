@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/lke-plugin-data-table",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Data-table plugin for Linkurious Enterprise",
   "main": "index.js",
   "homepage": "https://github.com/Linkurious/lke-plugin-data-table#readme",
@@ -16,7 +16,10 @@
     "lint": "eslint --fix  .",
     "lint:ci-deactivated": "eslint -f checkstyle -o reports/checkstyle.xml  .",
     "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-$(cat .version).tgz > lke-plugin-data-table.lke",
-    "plugin:tar": "scripts/postpack.js"
+    "plugin:tar": "scripts/postpack.js",
+    "bump:patch": "bump2version patch && npm version --no-git-tag-version patch",
+    "bump:minor": "bump2version minor && npm version --no-git-tag-version minor",
+    "bump:major": "bump2version major && npm version --no-git-tag-version major"
   },
   "license": "Apache 2",
   "files": [
