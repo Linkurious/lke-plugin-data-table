@@ -15,7 +15,7 @@
   "scripts": {
     "lint": "eslint --fix  .",
     "lint:ci-deactivated": "eslint -f checkstyle -o reports/checkstyle.xml  .",
-    "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-*.tgz > lke-plugin-data-table.lke",
+    "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-$(cat .version).tgz > lke-plugin-data-table.lke",
     "plugin:tar": "scripts/postpack.js"
   },
   "license": "Apache 2",
