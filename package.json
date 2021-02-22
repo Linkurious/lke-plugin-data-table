@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/lke-plugin-data-table",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Data-table plugin for Linkurious Enterprise",
   "main": "index.js",
   "homepage": "https://github.com/Linkurious/lke-plugin-data-table#readme",
