@@ -69,4 +69,4 @@ In order to display the result of a query template in a table:
 ```
 You can save this URL as a [Custom Action](https://doc.linkurio.us/user-manual/latest/custom-actions/), and when triggered, the `{{baseUrl}}` and `{{sourceKey}}` will be replaced with your LKE base URL and your current data-source key, respectively, and the final URL will be opened in a new tab. You can always do it manually if you want.
 
-*Note that when prepending `param_string_` to the template field name `City Name`, we had to [encode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) the name into `City%20Name` in order to be URL compliant.*
+*Note that when prepending `param_string_` to the template field name `City Name`, we had to [encode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent) it into `City%20Name` in order to be URL compliant.*
