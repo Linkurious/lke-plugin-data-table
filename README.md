@@ -40,9 +40,9 @@ This plugin supports the following URL parameters in the query string:
 | `queryId`                     | integer (**required**)  | ID of the query to run. | `queryId=87` |
 | `sourceKey`                   | string (**required**)   | Key of the data-source to run the query on. | `sourceKey=b16e9ed5` |
 | `limit`                       | integer (**optional**)  | Maximum number of results to display. | `limit=500` |
-| `param_number_{{Encoded field name}}` | number (**optional**)   | *For query templates*, any numerical parameter of the template | `param_number_age=30` |
-| `param_string_{{Encoded field name}}` | string (**optional**)   | *For query templates*, any string parameter of the template | `param_string_city=Paris` |
-| `param_ids_{{Encoded field name}}`    | comma-separated list (**optional**)  | *For query templates*, any edgeset/nodeset parameter of the template | `param_ids_target_ids=1,50,12` |
+| `param_number_{{Encoded field name}}` | number (**optional**)   | *For query templates*, any numerical parameter of the template. | `param_number_age=30` |
+| `param_string_{{Encoded field name}}` | string (**optional**)   | *For query templates*, any string parameter of the template. | `param_string_city=Paris` |
+| `param_ids_{{Encoded field name}}`    | comma-separated list (**optional**)  | *For query templates*, any edgeset/nodeset parameter of the template. | `param_ids_target_ids=1,50,12` |
 
 ### Usage with standard queries
 
