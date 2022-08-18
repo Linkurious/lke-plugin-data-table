@@ -26,9 +26,10 @@ module.exports = function configureRoutes(options) {
    * @param entityType
    * @param itemType
    * @param properties
+   * @param delimiter
    * @returns {{message: string}|{message: string}|{message: string}|null|{message: string}}
    */
-  function checkPluginsConfiguration(schemaTypes, entityType, itemType, properties) {
+  function checkPluginsConfiguration(schemaTypes, entityType, itemType, properties, delimiter) {
     if (entityType && entityType !== 'node' && entityType !== 'edge') {
       return {message: 'Invalid plugin configuration “entityType” (must be “node” or “edge”)'};
     }
@@ -40,6 +41,9 @@ module.exports = function configureRoutes(options) {
     if (properties && (!Array.isArray(properties) || properties.length === 0)) {
       return {message: 'Invalid plugin configuration “properties” (must be a non-empty array of property names)'};
     }
+    if (delimiter && delimiter.length != 1) {
+      return {message: 'Invalid plugin configuration “delimiter” (only one character is allowed)'};
+    }
     return null;
   }
 
@@ -48,7 +52,8 @@ module.exports = function configureRoutes(options) {
     const entityType = options.configuration.entityType;
     const itemType = options.configuration.itemType;
     const properties = options.configuration.properties;
-    const error = checkPluginsConfiguration(schemaTypes, entityType, itemType, properties);
+    const delimiter = options.configuration.delimiter;
+    const error = checkPluginsConfiguration(schemaTypes, entityType, itemType, properties, delimiter);
     if (error) {
       res.status(412);
       res.send(JSON.stringify({status: 412, body: {error}}));
