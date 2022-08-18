@@ -21,6 +21,7 @@ Configuration keys supported only by the data-table plugin:
 | :-- | :-- | :-- | :-- |
 | `entityType`  | "edge" \| "node" (**required**)  | Whether to display nodes or edges in the table. | `"node"` |
 | `itemType`    | string (**required**)            | Name of the node category or edge type to display in the table. | `"Company"` |
+| `delimiter`    | string (**optional**)           | The delimiter used for csv files downloads. Only one character is allowed. By default "," is used | `";"` |
 | `properties`  | string\[] (**optional**)         | Property names to include in the table. Defaults to all the properties of `itemType`. | `["name", "address", "vat_number"]` |
 
 Configuration example for 1 data-table instance accesible via `/plugins/table`:
