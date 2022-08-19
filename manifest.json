@@ -1,6 +1,6 @@
 {
   "name": "data-table",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "pluginApiVersion": "1.0.0",
   "publicRoute": "public",
   "singlePageAppIndex": "index.html",
