@@ -9,6 +9,8 @@ lerna-debug.log*
 **/.idea
 .idea
 
+*.lke
+
 # our own files
 **.lke
 
@@ -30,6 +32,9 @@ coverage
 
 # nyc test coverage
 .nyc_output
+
+reports
+.npmrc
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt

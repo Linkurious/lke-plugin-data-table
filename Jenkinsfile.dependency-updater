@@ -1,0 +1,8 @@
+@Library('linkurious-shared')_
+
+lkeSubReleaseJob {
+  // General
+  projectName = "linkurious/lke-plugin-data-table"
+
+  releasing = false
+}
