@@ -525,7 +525,11 @@ function showModal() {
 function addButtons() {
     // EXPORT TO CSV BUTTON
     document.getElementById('button-export').addEventListener('click', () => {
-        table.download('csv', 'data.csv');
+        delimiterCharacter = ",";
+        if (pluginConfiguration.delimiter){
+            delimiterCharacter = pluginConfiguration.delimiter;
+        }
+        table.download('csv', 'data.csv', {delimiter:delimiterCharacter, bom:true});
     });
 
     // OPEN EDIT COLUMN MODAL
