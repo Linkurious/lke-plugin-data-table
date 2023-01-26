@@ -15,4 +15,6 @@ nodeJob {
   binaries = ["lke-plugin-data-table.lke"]
   groupId = 'com.linkurious.plugins'
 
+  githubRelease = true
+
 }
