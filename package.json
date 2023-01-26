@@ -15,9 +15,9 @@
   "scripts": {
     "lint": "eslint --fix  .",
     "lint:ci-deactivated": "eslint -f checkstyle -o reports/checkstyle.xml  .",
-    "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-$(cat .version).tgz > lke-plugin-data-table.lke",
+    "build": "npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-$(cat .version).tgz > lke-plugin-data-table.lke && ln -sf lke-plugin-data-table.lke tmp/lke-plugin-data-table-v$(cat .version).lke",
     "plugin:tar": "scripts/postpack.js",
-    "upload": "gh release create \"v$(cat .version)\" lke-plugin-data-table.lke",
+    "manual-upload": "gh release create \"v$(cat .version)\" tmp/lke-plugin-data-table-v$(cat .version).lke",
     "bump:patch": "bump2version patch && npm version --no-git-tag-version patch",
     "bump:minor": "bump2version minor && npm version --no-git-tag-version minor",
     "bump:major": "bump2version major && npm version --no-git-tag-version major"
