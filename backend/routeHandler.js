@@ -107,12 +107,12 @@ module.exports = function configureRoutes(options) {
         res.send(JSON.stringify(response));
       }
       else {
-        throw new Error(`Multiple queries named ${req.body.name} exists. The query name must be unique.`);
+        throw new Error(`Multiple queries named ${req.body.name} exist. The query name must be unique.`);
       }
     } catch (error) {
       res.status(400);
       res.contentType('application/json');
-      res.send(JSON.stringify({ status: 400, body: { error: {message: error.message } }));
+      res.send(JSON.stringify({ status: 400, body: { error: {message: error.message } }}));
     }
 
   });
