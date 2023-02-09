@@ -710,7 +710,6 @@ async function getQuery() {
     }
 }
 
-
 /**
  * start the plugin table
  * @returns {Promise<void>}
