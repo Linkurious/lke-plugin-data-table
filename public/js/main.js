@@ -182,16 +182,11 @@ function validateTemplateFieldsParams(query) {
     }
 }
 
-function validateQueryId(query){
-    queryParams.global.queryId = queryParams.global.queryId === undefined ? query.id : queryParams.global.queryId;
-}
-
 /**
  * validate the global query params : queryID, sourceKey
  * @param params
  * @returns {boolean|void}
  */
-
 function validateGlobalQueryParams(params) {
     if (params.queryId === undefined && params.queryName === undefined) {
         return handleError({body: {message: 'Missing URL parameter: a “queryId” (number) or a “queryName” (string) is mandatory'}});
@@ -726,7 +721,6 @@ async function main() {
     try {
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;
-        validateQueryId(query);
         validateTemplateFieldsParams(query);
         await getSchema();
         const isConfigurationValid = await validatePluginConfiguration();
