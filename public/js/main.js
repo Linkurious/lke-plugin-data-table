@@ -190,9 +190,9 @@ function validateTemplateFieldsParams(query) {
 function validateGlobalQueryParams(params) {
     if (params.queryId === undefined && params.queryName === undefined) {
         return handleError({body: {message: 'Missing URL parameter: a “queryId” (number) or a “queryName” (string) is mandatory'}});
-    } else if (params.queryId != undefined && params.queryName != undefined) {
+    } else if (params.queryId !== undefined && params.queryName !== undefined) {
         return handleError({body: {message: 'Only one query parameter is allowed: impossible to use “queryId” and “queryName” at the same moment'}});
-    } else if (params.queryId != undefined && !Number.isInteger(+params.queryId)) {
+    } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId)) {
         return handleError({body: {message: 'URL parameter “queryId” must be a number'}});
     } else if (params.sourceKey === undefined) {
         return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
@@ -685,7 +685,7 @@ function escapeDotCharacters(value) {
  */
 async function getQuery() {
     try {
-        if (queryParams.global.queryId != undefined){
+        if (queryParams.global.queryId !== undefined){
             return await makeRequest(
                 'POST',
                 `api/getQuery`,
