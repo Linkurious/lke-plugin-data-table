@@ -195,7 +195,7 @@ function validateGlobalQueryParams(params) {
     } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId)) {
         return handleError({body: {message: 'URL parameter “queryId” must be a number'}});
     } else if (params.sourceKey === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
+        return handleError({body: {message: 'Missing URL parameter “sourceKey” (must be a string)'}});
     }
     return true;
 }
