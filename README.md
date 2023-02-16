@@ -38,7 +38,8 @@ This plugin supports the following URL parameters in the query string:
 
 | Param | Type | Description | Example |
 | :-- | :-- | :-- | :-- |
-| `queryId`                     | integer (**required**)  | ID of the query to run. | `queryId=87` |
+| `queryId`                     | integer (**required**, forbidden if `queryName` is used)  | ID of the query to run. | `queryId=87` |
+| `queryName`                     | string (**required**, forbidden if `queryId` is used)  | Name of the query to run. | `queryName=getTransactions` |
 | `sourceKey`                   | string (**required**)   | Key of the data-source to run the query on. | `sourceKey=b16e9ed5` |
 | `limit`                       | integer (**optional**)  | Maximum number of results to display. | `limit=500` |
 | `param_number_{{Encoded field name}}` | number (**optional**)   | *For query templates*, any numerical parameter of the template. | `param_number_age=30` |
