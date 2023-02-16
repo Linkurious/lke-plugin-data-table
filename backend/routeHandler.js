@@ -74,9 +74,53 @@ module.exports = function configureRoutes(options) {
     res.send(JSON.stringify(query));
   });
 
+  options.router.post('/getQueryByName', async (req, res) => {
+    try {
+    // Checking templates
+      const getQueryParams = {
+        sourceKey: req.body.sourceKey,
+        type: "template"
+      };
+
+      let response = (await options.getRestClient(req).graphQuery.getQueries(getQueryParams));
+
+      let queries = response.body.filter((q) => {
+        return q.name.toLowerCase() === req.body.name.toLowerCase();
+      });
+
+      // Checking statics
+      getQueryParams.type = "static"
+
+      response = (await options.getRestClient(req).graphQuery.getQueries(getQueryParams));
+
+      queries = queries.concat(response.body.filter((q) => {
+        return q.name.toLowerCase() === req.body.name.toLowerCase();
+      }));
+
+      if (queries.length === 0) {
+        throw new Error(`Query ${req.body.name} either does not exist or you do not have access to it.`);
+      }
+      else if (queries.length === 1) {
+        response.body = queries[0]
+        res.status(200);
+        res.contentType('application/json');
+        res.send(JSON.stringify({body: queries[0]}));
+      }
+      else {
+        throw new Error(`Multiple queries named ${req.body.name} exist. The query name must be unique.`);
+      }
+    } catch (error) {
+      res.status(400);
+      res.contentType('application/json');
+      res.send(JSON.stringify({ status: 400, body: { error: {message: error.message } }}));
+    }
+
+  });
+
+
   options.router.post('/runQueryByIDPlugin', async (req, res) => {
     const data = {
-      id: +req.body.queryParams.global.queryId,
+      id: +req.body.query.id,
       sourceKey: req.body.queryParams.global.sourceKey,
       limit: +req.body.queryParams.global.limit
     };
