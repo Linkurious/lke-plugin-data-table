@@ -137,7 +137,8 @@ function getParameter(item) {
         oneOf: [
             'sourceKey',
             'limit',
-            'queryId'
+            'queryId',
+            'queryName'
         ],
         startWith: [
             'param_number_',
@@ -187,12 +188,14 @@ function validateTemplateFieldsParams(query) {
  * @returns {boolean|void}
  */
 function validateGlobalQueryParams(params) {
-    if (params.queryId === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “query_id”'}});
-    } else if (!Number.isInteger(+params.queryId)) {
-        return handleError({body: {message: 'URL parameter “query_id” must be a number'}});
+    if (params.queryId === undefined && params.queryName === undefined) {
+        return handleError({body: {message: 'Missing URL parameter: a “queryId” (number) or a “queryName” (string) is mandatory'}});
+    } else if (params.queryId !== undefined && params.queryName !== undefined) {
+        return handleError({body: {message: 'Only one query parameter is allowed: impossible to use “queryId” and “queryName” at the same moment'}});
+    } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId)) {
+        return handleError({body: {message: 'URL parameter “queryId” must be a number'}});
     } else if (params.sourceKey === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
+        return handleError({body: {message: 'Missing URL parameter “sourceKey” (must be a string)'}});
     }
     return true;
 }
@@ -682,14 +685,26 @@ function escapeDotCharacters(value) {
  */
 async function getQuery() {
     try {
-        return await makeRequest(
-            'POST',
-            `api/getQuery`,
-            {
-                id: queryParams.global.queryId,
-                sourceKey: queryParams.global.sourceKey
-            }
-        );
+        if (queryParams.global.queryId !== undefined){
+            return await makeRequest(
+                'POST',
+                `api/getQuery`,
+                {
+                    id: queryParams.global.queryId,
+                    sourceKey: queryParams.global.sourceKey
+                }
+            );    
+        } else {
+            return await makeRequest(
+                'POST',
+                `api/getQueryByName`,
+                {
+                    name: queryParams.global.queryName,
+                    sourceKey: queryParams.global.sourceKey
+                }
+            );
+        }
+        
     } catch(e) {
         handleError(e);
     }
