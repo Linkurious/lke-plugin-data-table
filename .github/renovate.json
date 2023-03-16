@@ -4,6 +4,9 @@
     "github>Linkurious/renovate-config:meta",
     "regexManagers:dockerfileVersions"
   ],
+  "vulnerabilityAlerts": {
+    "baseBranches": ["develop"]
+  },
   "baseBranches": ["develop"],
   "prConcurrentLimit": 10
 }
