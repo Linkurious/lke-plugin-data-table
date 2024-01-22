@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "github>Linkurious/renovate-config",
+    "github>Linkurious/renovate-config:meta",
+    "regexManagers:dockerfileVersions"
+  ],
+  "baseBranches": ["develop"],
+  "prConcurrentLimit": 10
+}

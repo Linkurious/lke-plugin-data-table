@@ -1,12 +1,27 @@
 {
-  "name": "data-table",
-  "version": "1.0.2",
+  "name": "@linkurious/lke-plugin-data-table",
+  "version": "1.0.8",
   "description": "Data-table plugin for Linkurious Enterprise",
   "main": "index.js",
-  "scripts": {
-    "postpack": "scripts/postpack.js"
+  "homepage": "https://github.com/Linkurious/lke-plugin-data-table#readme",
+  "bugs": {
+    "url": "https://github.com/Linkurious/lke-plugin-data-table/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Linkurious/lke-plugin-data-table.git"
   },
   "author": "Linkurious",
+  "scripts": {
+    "lint": "eslint --fix  .",
+    "lint:ci-deactivated": "eslint -f checkstyle -o reports/checkstyle.xml  .",
+    "build": "mkdir -p tmp/github_release && npm pack && gunzip -qf -c linkurious-lke-plugin-data-table-$(cat .version).tgz > lke-plugin-data-table.lke && ln -sf $(pwd)/lke-plugin-data-table.lke $(pwd)/tmp/github_release/lke-plugin-data-table-v$(cat .version).lke",
+    "plugin:tar": "scripts/postpack.js",
+    "manual-upload": "gh release create \"v$(cat .version)\" tmp/github_release/lke-plugin-data-table-v$(cat .version).lke",
+    "bump:patch": "bump2version patch && npm version --no-git-tag-version patch",
+    "bump:minor": "bump2version minor && npm version --no-git-tag-version minor",
+    "bump:major": "bump2version major && npm version --no-git-tag-version major"
+  },
   "license": "Apache 2",
   "files": [
     "manifest.json",
@@ -18,5 +33,8 @@
   ],
   "dependencies": {
     "body-parser": "1.19.0"
+  },
+  "devDependencies": {
+    "eslint": "7.20.0"
   }
 }

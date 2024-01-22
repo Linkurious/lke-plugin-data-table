@@ -139,7 +139,8 @@ function getParameter(item) {
             'sourceKey',
             'limit',
             'queryId',
-            'truncated'
+            'truncated',
+            'queryName'
         ],
         startWith: [
             'param_number_',
@@ -189,12 +190,14 @@ function validateTemplateFieldsParams(query) {
  * @returns {boolean|void}
  */
 function validateGlobalQueryParams(params) {
-    if (params.queryId === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “query_id”'}});
-    } else if (!Number.isInteger(+params.queryId)) {
-        return handleError({body: {message: 'URL parameter “query_id” must be a number'}});
+    if (params.queryId === undefined && params.queryName === undefined) {
+        return handleError({body: {message: 'Missing URL parameter: a “queryId” (number) or a “queryName” (string) is mandatory'}});
+    } else if (params.queryId !== undefined && params.queryName !== undefined) {
+        return handleError({body: {message: 'Only one query parameter is allowed: impossible to use “queryId” and “queryName” at the same moment'}});
+    } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId)) {
+        return handleError({body: {message: 'URL parameter “queryId” must be a number'}});
     } else if (params.sourceKey === undefined) {
-        return handleError({body: {message: 'Missing URL parameter “source_key” (must be a string)'}});
+        return handleError({body: {message: 'Missing URL parameter “sourceKey” (must be a string)'}});
     }
     return true;
 }
@@ -340,7 +343,7 @@ function getTableStructure(schemaStructure) {
         }
         return {
             title: property.propertyKey,
-            field: property.propertyKey,
+            field: escapeDotCharacters(property.propertyKey),
             align: align,
             titleFormatter: truncateTableText,
             headerSort: false,
@@ -369,6 +372,12 @@ function getTableData(queryResult) {
                 } else {
                     item.data.properties[key] = value.value || value.original;
                 }
+            }
+            // If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+            if (key.includes('.')) {
+                Object.defineProperty(item.data.properties, escapeDotCharacters(key),
+                    Object.getOwnPropertyDescriptor(item.data.properties, key));
+                delete item.data.properties[key];
             }
         }
         return {...item.data.properties, 'id': item.id, 'row': index + 1};
@@ -457,9 +466,9 @@ function filterTableColumns() {
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
         if (list[i].checked) {
-            table.showColumn(list[i].id);
+            table.showColumn(escapeDotCharacters(list[i].id));
         } else {
-            table.hideColumn(list[i].id);
+            table.hideColumn(escapeDotCharacters(list[i].id));
         }
     }
     closeModal();
@@ -511,7 +520,7 @@ function showModal() {
     modal.style.opacity = '1';
     const list = document.getElementsByTagName('input');
     for (let i = 0; i < list.length; i++) {
-        list[i].checked = table.getColumn(list[i].id).getVisibility();
+        list[i].checked = table.getColumn(escapeDotCharacters(list[i].id)).getVisibility();
     }
 }
 
@@ -521,7 +530,11 @@ function showModal() {
 function addButtons() {
     // EXPORT TO CSV BUTTON
     document.getElementById('button-export').addEventListener('click', () => {
-        table.download('csv', 'data.csv');
+        delimiterCharacter = ",";
+        if (pluginConfiguration.delimiter){
+            delimiterCharacter = pluginConfiguration.delimiter;
+        }
+        table.download('csv', 'data.csv', {delimiter:delimiterCharacter, bom:true});
     });
 
     // OPEN EDIT COLUMN MODAL
@@ -661,19 +674,39 @@ function fillDataTable() {
 }
 
 /**
+ * If one of the property key has a . we replace it by the string 'dot' to avoid an error in Tabulator
+ * @param {string} value 
+ */
+function escapeDotCharacters(value) {
+    return value.replace(/\./g, 'dot');
+}
+
+/**
  * get query configuration
  * @returns {Promise<any>}
  */
 async function getQuery() {
     try {
-        return await makeRequest(
-            'POST',
-            `api/getQuery`,
-            {
-                id: queryParams.global.queryId,
-                sourceKey: queryParams.global.sourceKey
-            }
-        );
+        if (queryParams.global.queryId !== undefined){
+            return await makeRequest(
+                'POST',
+                `api/getQuery`,
+                {
+                    id: queryParams.global.queryId,
+                    sourceKey: queryParams.global.sourceKey
+                }
+            );    
+        } else {
+            return await makeRequest(
+                'POST',
+                `api/getQueryByName`,
+                {
+                    name: queryParams.global.queryName,
+                    sourceKey: queryParams.global.sourceKey
+                }
+            );
+        }
+        
     } catch(e) {
         handleError(e);
     }
