@@ -744,6 +744,11 @@ async function main() {
         handleError(e);
     }
 
+    var list = document.getElementsByClassName('tabulator-cell'); //support right to left text
+    for (let cell of list) {
+        cell['dir']='auto';
+    }
+
 }
 
 main();
