@@ -257,7 +257,7 @@ async function validatePluginConfiguration() {
 function truncateTableText(cell) {
     cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
 
-    if(isShowingLongValues) {
+    if (isShowingLongValues) {
         return cell.getValue();
     }
     return truncateText(cell.getValue(), 38);
@@ -716,8 +716,7 @@ async function getQuery() {
     }
 }
 
-function parseBool(val)
-{
+function parseBool(val) {
     if ((typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'yes')) || val === 1)
         return true;
     else if ((typeof val === 'string' && (val.toLowerCase() === 'false' || val.toLowerCase() === 'no')) || val === 0)
