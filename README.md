@@ -45,7 +45,7 @@ This plugin supports the following URL parameters in the query string:
 | `param_number_{{Encoded field name}}` | number (**optional**)   | *For query templates*, any numerical parameter of the template. | `param_number_age=30` |
 | `param_string_{{Encoded field name}}` | string (**optional**)   | *For query templates*, any string parameter of the template. | `param_string_city=Paris` |
 | `param_ids_{{Encoded field name}}`    | comma-separated list (**optional**)  | *For query templates*, any edgeset/nodeset parameter of the template. | `param_ids_target_ids=1,50,12` |
-| `truncated`                       | boolean (**optional**)  | Avoids truncation of long texts. | `truncated=false` |
+| `showLongValues`                       | boolean (**optional**)  | Avoids truncation of long texts. | `showLongValues=false` |
 
 ### Usage with standard queries
 

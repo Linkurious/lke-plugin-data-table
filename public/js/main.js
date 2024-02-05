@@ -4,7 +4,7 @@ let tableStructure;
 let schema;
 let table;
 let query;
-let isTruncated;
+let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
@@ -139,7 +139,7 @@ function getParameter(value, key) {
       'limit',
       'queryId',
       'queryName',
-      'truncated'
+      'showLongValues'
     ],
     startWith: [
       'param_number_',
@@ -255,7 +255,10 @@ async function validatePluginConfiguration() {
  * @returns {string}
  */
 function truncateTableText(cell) {
-    return truncateText(cell.getValue(), isTruncated ? 38 : Infinity);
+    if(isShowingLongValues){
+        return cell.getValue();
+    }
+    return truncateText(cell.getValue(), 38);
 }
 
 /**
@@ -718,7 +721,7 @@ function parseBool(val)
     else if ((typeof val === 'string' && (val.toLowerCase() === 'false' || val.toLowerCase() === 'no')) || val === 0)
         return false;
 
-    return true;
+    return false;
 }
 
 /**
@@ -729,7 +732,7 @@ async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
     try {
-        isTruncated = parseBool(queryParams.global.truncated);
+        isShowingLongValues = parseBool(queryParams.global.showLongValues);
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;
         validateTemplateFieldsParams(query);
