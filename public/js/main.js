@@ -255,7 +255,9 @@ async function validatePluginConfiguration() {
  * @returns {string}
  */
 function truncateTableText(cell) {
-    if(isShowingLongValues){
+    cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
+
+    if(isShowingLongValues) {
         return cell.getValue();
     }
     return truncateText(cell.getValue(), 38);
@@ -745,12 +747,6 @@ async function main() {
     } catch(e) {
         handleError(e);
     }
-
-    var list = document.getElementsByClassName('tabulator-cell'); //support right to left text
-    for (let cell of list) {
-        cell['dir']='auto';
-    }
-
 }
 
 main();
