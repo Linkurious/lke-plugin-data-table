@@ -254,8 +254,8 @@ async function validatePluginConfiguration() {
  * @param cell
  * @returns {string}
  */
-function truncateTableText(cell) {
-    cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
+function formatTableCell(cell) {
+   cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
 
     if (isShowingLongValues) {
         return cell.getValue();
@@ -349,9 +349,9 @@ function getTableStructure(schemaStructure) {
             title: property.propertyKey,
             field: escapeDotCharacters(property.propertyKey),
             align: align,
-            titleFormatter: truncateTableText,
+            titleFormatter: formatTableCell,
             headerSort: false,
-            formatter: truncateTableText,
+            formatter: formatTableCell,
             tooltip: getFieldTooltip
         };
     });
