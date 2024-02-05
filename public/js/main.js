@@ -4,6 +4,7 @@ let tableStructure;
 let schema;
 let table;
 let query;
+let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
@@ -137,7 +138,8 @@ function getParameter(value, key) {
       'sourceKey',
       'limit',
       'queryId',
-      'queryName'
+      'queryName',
+      'showLongValues'
     ],
     startWith: [
       'param_number_',
@@ -252,7 +254,12 @@ async function validatePluginConfiguration() {
  * @param cell
  * @returns {string}
  */
-function truncateTableText(cell) {
+function formatTableCell(cell) {
+   cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
+
+    if (isShowingLongValues) {
+        return cell.getValue();
+    }
     return truncateText(cell.getValue(), 38);
 }
 
@@ -342,9 +349,9 @@ function getTableStructure(schemaStructure) {
             title: property.propertyKey,
             field: escapeDotCharacters(property.propertyKey),
             align: align,
-            titleFormatter: truncateTableText,
+            titleFormatter: formatTableCell,
             headerSort: false,
-            formatter: truncateTableText,
+            formatter: formatTableCell,
             tooltip: getFieldTooltip
         };
     });
@@ -709,6 +716,15 @@ async function getQuery() {
     }
 }
 
+function parseBool(val) {
+    if ((typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'yes')) || val === 1)
+        return true;
+    else if ((typeof val === 'string' && (val.toLowerCase() === 'false' || val.toLowerCase() === 'no')) || val === 0)
+        return false;
+
+    return false;
+}
+
 /**
  * start the plugin table
  * @returns {Promise<void>}
@@ -717,6 +733,7 @@ async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
     try {
+        isShowingLongValues = parseBool(queryParams.global.showLongValues);
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;
         validateTemplateFieldsParams(query);
@@ -729,7 +746,6 @@ async function main() {
     } catch(e) {
         handleError(e);
     }
-
 }
 
 main();
