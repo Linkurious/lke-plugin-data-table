@@ -297,11 +297,16 @@ svg.stroke {
     border-radius: 4px !important;
 }
 
-.tabulator-cell {
-    height: 44px;
-    padding: 12px !important;
-    border-bottom: 1px solid #aaa !important;
-    background-color: #fff !important;
+.tabulator-row .tabulator-cell {
+    padding: 12px;
+    border-bottom: 1px solid #aaa;
+    background-color: #fff;
+    white-space: pre-wrap;
+    max-width: 300px;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    max-width: 300px;
 }
 
 .tabulator-row {

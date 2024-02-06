@@ -4,6 +4,7 @@ let tableStructure;
 let schema;
 let table;
 let query;
+let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
 const loaderElement = document.getElementById('loader');
@@ -111,57 +112,57 @@ async function runQueryByID(query) {
  * set queryParams as a json object containing the query parameters
  */
 function parseQueryParams() {
-    const url = location.search;
-    const query = url.substr(1);
-    const result = {global: {}, templateFields: {}};
-    query.split('&').forEach((param) => {
-        const item = param.split('=');
-        const parameter = getParameter(item);
-        if (parameter) {
-            if (parameter.type === 'global') {
-                result.global[decodeURIComponent(parameter.key)] = parameter.value;
-            } else if (parameter.type === 'templateField') {
-                result.templateFields[decodeURIComponent(parameter.key)] = parameter.value;
-            }
-        }
-    });
-    queryParams = result;
+  const result = {global: {}, templateFields: {}};
+  const parameters = new URLSearchParams(location.search);
+  parameters.forEach((value, key) => {
+    const parameter = getParameter(value, key);
+    if (parameter) {
+      if (parameter.type === 'global') {
+        result.global[decodeURIComponent(parameter.key)] = parameter.value;
+      } else if (parameter.type === 'templateField') {
+        result.templateFields[decodeURIComponent(parameter.key)] = parameter.value;
+      }
+    }
+  });
+  queryParams = result;
 }
 
 /**
  * check if the query-param  is allowed
- * @param item
+ * @param value
+ * @param key
  */
-function getParameter(item) {
-    const allowedParams = {
-        oneOf: [
-            'sourceKey',
-            'limit',
-            'queryId',
-            'queryName'
-        ],
-        startWith: [
-            'param_number_',
-            'param_ids_',
-            'param_string_'
-        ]
-    };
-    const decodedValue = decodeURIComponent(item[1]);
-    if (allowedParams.oneOf.includes(item[0])) {
-        return {key: item[0], value: decodedValue, type: 'global'};
-    } else {
-        const prefix = allowedParams.startWith.find((prefix) => item[0].startsWith(prefix));
-        switch (prefix) {
-            case  'param_number_':
-                return {key: item[0].replace('param_number_', ''), value: +decodedValue, type: 'templateField'};
-            case  'param_ids_':
-                return {key: item[0].replace('param_ids_', ''), value: decodedValue, type: 'templateField'};
-            case  'param_string_':
-                return {key: item[0].replace('param_string_', ''), value: decodedValue, type: 'templateField'};
-            default:
-                return false;
-        }
+function getParameter(value, key) {
+  const allowedParams = {
+    oneOf: [
+      'sourceKey',
+      'limit',
+      'queryId',
+      'queryName',
+      'showLongValues'
+    ],
+    startWith: [
+      'param_number_',
+      'param_ids_',
+      'param_string_'
+    ]
+  };
+  const decodedValue = decodeURIComponent(value);
+  if (allowedParams.oneOf.includes(key)) {
+    return {key: key, value: decodedValue, type: 'global'};
+  } else {
+    const prefix = allowedParams.startWith.find((prefix) => key.startsWith(prefix));
+    switch (prefix) {
+      case  'param_number_':
+        return {key: key.replace('param_number_', ''), value: +decodedValue, type: 'templateField'};
+      case  'param_ids_':
+        return {key: key.replace('param_ids_', ''), value: decodedValue, type: 'templateField'};
+      case  'param_string_':
+        return {key: key.replace('param_string_', ''), value: decodedValue, type: 'templateField'};
+      default:
+        return false;
     }
+  }
 }
 
 /**
@@ -253,7 +254,12 @@ async function validatePluginConfiguration() {
  * @param cell
  * @returns {string}
  */
-function truncateTableText(cell) {
+function formatTableCell(cell) {
+   cell.getElement().setAttribute("dir", "auto"); //Add support for right to left text
+
+    if (isShowingLongValues) {
+        return cell.getValue();
+    }
     return truncateText(cell.getValue(), 38);
 }
 
@@ -343,9 +349,9 @@ function getTableStructure(schemaStructure) {
             title: property.propertyKey,
             field: escapeDotCharacters(property.propertyKey),
             align: align,
-            titleFormatter: truncateTableText,
+            titleFormatter: formatTableCell,
             headerSort: false,
-            formatter: truncateTableText,
+            formatter: formatTableCell,
             tooltip: getFieldTooltip
         };
     });
@@ -710,6 +716,15 @@ async function getQuery() {
     }
 }
 
+function parseBool(val) {
+    if ((typeof val === 'string' && (val.toLowerCase() === 'true' || val.toLowerCase() === 'yes')) || val === 1)
+        return true;
+    else if ((typeof val === 'string' && (val.toLowerCase() === 'false' || val.toLowerCase() === 'no')) || val === 0)
+        return false;
+
+    return false;
+}
+
 /**
  * start the plugin table
  * @returns {Promise<void>}
@@ -718,6 +733,7 @@ async function main() {
     loaderElement.classList.add('active');
     parseQueryParams();
     try {
+        isShowingLongValues = parseBool(queryParams.global.showLongValues);
         validateGlobalQueryParams(queryParams.global);
         query = JSON.parse((await getQuery()).response).body;
         validateTemplateFieldsParams(query);
@@ -730,7 +746,6 @@ async function main() {
     } catch(e) {
         handleError(e);
     }
-
 }
 
 main();
