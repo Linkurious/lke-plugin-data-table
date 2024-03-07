@@ -645,6 +645,37 @@ function alignRightHeaders() {
     });
 }
 
+function addSingleQuoteToCsvIfNeeded(str) {
+  const specialChars = ['=', '+', '-', '@', '\t', '\r'];
+  if (specialChars.some(char => str.startsWith(char))) {
+    return "'" + str;
+  } else {
+    return str;
+  }
+}
+
+/**
+ * Patch the Tabulator CSV downloader logic to add a single quote to values starting with special characters
+ * This fixes the issue where Excel would interpret these values as formulas, creating a security risk
+ */
+function patchTabulatorCsvDownloader() {
+  const getFieldValueCopy = Tabulator.prototype.moduleBindings.download.prototype.getFieldValue;
+  Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
+    const context = this;
+    let value = getFieldValueCopy.call(context, columnName, rowData);
+    switch (value === undefined ? "undefined" : typeof value) {
+      case 'object':
+        value = JSON.stringify(value);
+        break;
+      case 'undefined':
+      case 'null':
+        value = '';
+        break;
+    }
+    return addSingleQuoteToCsvIfNeeded(String(value));
+  }
+}
+
 /**
  * create the date table by creating a Tabulator object
  */
@@ -657,6 +688,7 @@ function fillDataTable() {
     loaderElement.classList.remove('active');
     document.getElementById('container').classList.remove('hide');
     setTableHeader();
+    patchTabulatorCsvDownloader();
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
         tooltipsHeader: getTooltipsHeader,
