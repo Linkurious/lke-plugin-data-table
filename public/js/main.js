@@ -7,24 +7,27 @@ let query;
 let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
-const loaderElement = document.getElementById('loader');
-const modal = document.getElementById('modal');
+const g = typeof globalThis === 'object' ? globalThis : typeof window === 'object' ? window : null;
+const loaderElement = g.document ? document.getElementById('loader') : undefined;
+const modal = g.document ? document.getElementById('modal') : undefined;
 
-// close the edit columns modal when clicking outside of it
-document.querySelector('body').addEventListener('click', () => {
-    if (event.target === modal) {
-        closeModal();
-    }
-});
-// close the edit columns modal when escape key is pressed
-window.onkeyup = (e) => {
-    if (
-        e.key === 'Escape' && modal.style.visibility === 'visible'
-    ) {
-        e.preventDefault();
-        closeModal();
-    }
-};
+if (g.document) {
+    // close the edit columns modal when clicking outside of it
+    document.querySelector('body').addEventListener('click', () => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+    // close the edit columns modal when escape key is pressed
+    g.onkeyup = (e) => {
+        if (
+          e.key === 'Escape' && modal.style.visibility === 'visible'
+        ) {
+            e.preventDefault();
+            closeModal();
+        }
+    };
+}
 
 /**
  * make XMLHttpRequest
@@ -65,7 +68,10 @@ function makeRequest(verb = 'GET', url, body) {
  * @param event : Object
  */
 function handleError(event) {
-    document.getElementById('error_description').innerText = event.body.message;
+    if (event instanceof Error) {
+        event = {body: {message: event.message}};
+    }
+    document.getElementById('error_description').innerText = event.body ? event.body.message : '';
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
     document.getElementById('error').classList.remove('hide');
@@ -639,13 +645,13 @@ function changePaginationButtonState(first, prev, next, last) {
  * align the columns header title to the right
  */
 function alignRightHeaders() {
-    document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
-    headersToAlignRight.forEach(index => {
-        document.querySelectorAll('.tabulator-col-title').item(index).classList.add('align-right');
-    });
+  document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
+  headersToAlignRight.forEach(index => {
+    document.querySelectorAll('.tabulator-col-title').item(index).classList.add('align-right');
+  });
 }
 
-function addSingleQuoteToCsvIfNeeded(str) {
+g.addSingleQuoteToCsvIfNeeded = function(str) {
   const specialChars = ['=', '+', '-', '@', '\t', '\r'];
   if (specialChars.some(char => str.startsWith(char))) {
     return "'" + str;
@@ -666,7 +672,7 @@ function patchTabulatorCsvDownloader() {
   Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
     const value = getFieldValueCopy.call(this, columnName, rowData);
     if (typeof value === 'string' || typeof value === 'number') {
-      return addSingleQuoteToCsvIfNeeded(String(value));
+      return g.addSingleQuoteToCsvIfNeeded(String(value));
     }
     return value;
   }
