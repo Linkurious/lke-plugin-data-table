@@ -664,7 +664,7 @@ function patchTabulatorCsvDownloader() {
     console.error('Ooops, something is wrong. CSV download might not work correctly. LKE-4315');
   }
   Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
-    const value = getFieldValueCopy.call(context, columnName, rowData);
+    const value = getFieldValueCopy.call(this, columnName, rowData);
     if (typeof value === 'string' || typeof value === 'number') {
       return addSingleQuoteToCsvIfNeeded(String(value));
     }
