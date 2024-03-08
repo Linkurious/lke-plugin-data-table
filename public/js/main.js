@@ -659,20 +659,16 @@ function addSingleQuoteToCsvIfNeeded(str) {
  * This fixes the issue where Excel would interpret these values as formulas, creating a security risk
  */
 function patchTabulatorCsvDownloader() {
-  const getFieldValueCopy = Tabulator.prototype.moduleBindings.download.prototype.getFieldValue;
+  const getFieldValueCopy = Tabulator.prototype.moduleBindings?.download?.prototype?.getFieldValue;
+  if (getFieldValueCopy === undefined) {
+    console.error('Ooops, something is wrong. CSV download might not work correctly. LKE-4315');
+  }
   Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
-    const context = this;
-    let value = getFieldValueCopy.call(context, columnName, rowData);
-    switch (value === undefined ? "undefined" : typeof value) {
-      case 'object':
-        value = JSON.stringify(value);
-        break;
-      case 'undefined':
-      case 'null':
-        value = '';
-        break;
+    const value = getFieldValueCopy.call(context, columnName, rowData);
+    if (typeof value === 'string' || typeof value === 'number') {
+      return addSingleQuoteToCsvIfNeeded(String(value));
     }
-    return addSingleQuoteToCsvIfNeeded(String(value));
+    return value;
   }
 }
 
