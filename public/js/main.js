@@ -651,6 +651,12 @@ function alignRightHeaders() {
   });
 }
 
+/**
+ * Note: in 'Numbers' on Mac, a string beginning with space(s) and one of the following characters: = + - @ \t \r 
+ * is interpeted as a formula.
+ * We decided to not fix all edge cases, but only the most common ones for now, so this method does fix this. 
+ * But this could be a possible improvement in the future if needed.
+ */
 g.addSingleQuoteToCsvIfNeeded = function(str) {
   const specialChars = ['=', '+', '-', '@', '\t', '\r'];
   if (specialChars.some(char => str.startsWith(char))) {
