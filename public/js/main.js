@@ -7,11 +7,11 @@ let query;
 let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
-const g = typeof globalThis === 'object' ? globalThis : typeof window === 'object' ? window : null;
-const loaderElement = g.document ? document.getElementById('loader') : undefined;
-const modal = g.document ? document.getElementById('modal') : undefined;
+const globalThisOrWindow = typeof globalThis === 'object' ? globalThis : typeof window === 'object' ? window : null;
+const loaderElement = globalThisOrWindow.document ? document.getElementById('loader') : undefined;
+const modal = globalThisOrWindow.document ? document.getElementById('modal') : undefined;
 
-if (g.document) {
+if (globalThisOrWindow.document) {
     // close the edit columns modal when clicking outside of it
     document.querySelector('body').addEventListener('click', () => {
         if (event.target === modal) {
@@ -19,7 +19,7 @@ if (g.document) {
         }
     });
     // close the edit columns modal when escape key is pressed
-    g.onkeyup = (e) => {
+    globalThisOrWindow.onkeyup = (e) => {
         if (
           e.key === 'Escape' && modal.style.visibility === 'visible'
         ) {
@@ -657,7 +657,7 @@ function alignRightHeaders() {
  * We decided to not fix all edge cases, but only the most common ones for now, so this method does fix this. 
  * But this could be a possible improvement in the future if needed.
  */
-g.addSingleQuoteToCsvIfNeeded = function(str) {
+globalThisOrWindow.addSingleQuoteToCsvIfNeeded = function(str) {
   const specialChars = ['=', '+', '-', '@', '\t', '\r'];
   if (specialChars.some(char => str.startsWith(char))) {
     return "'" + str;
@@ -678,7 +678,7 @@ function patchTabulatorCsvDownloader() {
   Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
     const value = getFieldValueCopy.call(this, columnName, rowData);
     if (typeof value === 'string' || typeof value === 'number') {
-      return g.addSingleQuoteToCsvIfNeeded(String(value));
+      return globalThisOrWindow.addSingleQuoteToCsvIfNeeded(String(value));
     }
     return value;
   }
