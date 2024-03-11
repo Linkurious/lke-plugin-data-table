@@ -7,24 +7,27 @@ let query;
 let isShowingLongValues;
 let pluginConfiguration;
 const headersToAlignRight = [];
-const loaderElement = document.getElementById('loader');
-const modal = document.getElementById('modal');
+const globalThisOrWindow = typeof globalThis === 'object' ? globalThis : typeof window === 'object' ? window : null;
+const loaderElement = globalThisOrWindow.document ? document.getElementById('loader') : undefined;
+const modal = globalThisOrWindow.document ? document.getElementById('modal') : undefined;
 
-// close the edit columns modal when clicking outside of it
-document.querySelector('body').addEventListener('click', () => {
-    if (event.target === modal) {
-        closeModal();
-    }
-});
-// close the edit columns modal when escape key is pressed
-window.onkeyup = (e) => {
-    if (
-        e.key === 'Escape' && modal.style.visibility === 'visible'
-    ) {
-        e.preventDefault();
-        closeModal();
-    }
-};
+if (globalThisOrWindow.document) {
+    // close the edit columns modal when clicking outside of it
+    document.querySelector('body').addEventListener('click', () => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+    // close the edit columns modal when escape key is pressed
+    globalThisOrWindow.onkeyup = (e) => {
+        if (
+          e.key === 'Escape' && modal.style.visibility === 'visible'
+        ) {
+            e.preventDefault();
+            closeModal();
+        }
+    };
+}
 
 /**
  * make XMLHttpRequest
@@ -65,7 +68,10 @@ function makeRequest(verb = 'GET', url, body) {
  * @param event : Object
  */
 function handleError(event) {
-    document.getElementById('error_description').innerText = event.body.message;
+    if (event instanceof Error) {
+        event = {body: {message: event.message}};
+    }
+    document.getElementById('error_description').innerText = event.body ? event.body.message : '';
     document.getElementById('loading').classList.add('hide');
     document.getElementById('spinner').classList.add('hide');
     document.getElementById('error').classList.remove('hide');
@@ -639,10 +645,43 @@ function changePaginationButtonState(first, prev, next, last) {
  * align the columns header title to the right
  */
 function alignRightHeaders() {
-    document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
-    headersToAlignRight.forEach(index => {
-        document.querySelectorAll('.tabulator-col-title').item(index).classList.add('align-right');
-    });
+  document.querySelectorAll('.tabulator-col-title').item(1).classList.add('align-right');
+  headersToAlignRight.forEach(index => {
+    document.querySelectorAll('.tabulator-col-title').item(index).classList.add('align-right');
+  });
+}
+
+/**
+ * Note: in 'Numbers' on Mac, a string beginning with space(s) and one of the following characters: = + - @ \t \r 
+ * is interpeted as a formula.
+ * We decided to not fix all edge cases, but only the most common ones for now, so this method does fix this. 
+ * But this could be a possible improvement in the future if needed.
+ */
+globalThisOrWindow.addSingleQuoteToCsvIfNeeded = function(str) {
+  const specialChars = ['=', '+', '-', '@', '\t', '\r'];
+  if (specialChars.some(char => str.startsWith(char))) {
+    return "'" + str;
+  } else {
+    return str;
+  }
+}
+
+/**
+ * Patch the Tabulator CSV downloader logic to add a single quote to values starting with special characters
+ * This fixes the issue where Excel would interpret these values as formulas, creating a security risk
+ */
+function patchTabulatorCsvDownloader() {
+  const getFieldValueCopy = Tabulator.prototype.moduleBindings?.download?.prototype?.getFieldValue;
+  if (getFieldValueCopy === undefined) {
+    console.error('Ooops, something is wrong. CSV download might not work correctly. LKE-4315');
+  }
+  Tabulator.prototype.moduleBindings.download.prototype.getFieldValue = function(columnName,rowData) {
+    const value = getFieldValueCopy.call(this, columnName, rowData);
+    if (typeof value === 'string' || typeof value === 'number') {
+      return globalThisOrWindow.addSingleQuoteToCsvIfNeeded(String(value));
+    }
+    return value;
+  }
 }
 
 /**
@@ -657,6 +696,7 @@ function fillDataTable() {
     loaderElement.classList.remove('active');
     document.getElementById('container').classList.remove('hide');
     setTableHeader();
+    patchTabulatorCsvDownloader();
     // create Tabulator on DOM element with id "example-table"
     table = new Tabulator('#table', {
         tooltipsHeader: getTooltipsHeader,
