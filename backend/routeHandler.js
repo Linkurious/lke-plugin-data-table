@@ -65,7 +65,7 @@ module.exports = function configureRoutes(options) {
 
   options.router.post('/getQuery', async (req, res) => {
     const getQueryParams = {
-      id: +req.body.id,
+      id: req.body.id,
       sourceKey: req.body.sourceKey
     };
     const query = await options.getRestClient(req).graphQuery.getQuery(getQueryParams);
