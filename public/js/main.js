@@ -210,7 +210,7 @@ function validateGlobalQueryParams(params) {
 /**
  * Return true if the supplied value is a valid RFC4122 UUID.
  */
-export function isUuid(value) {
+function isUuid(value) {
   if (typeof value !== 'string') {
     return false;
   }
