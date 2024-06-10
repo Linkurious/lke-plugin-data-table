@@ -38,7 +38,7 @@ This plugin supports the following URL parameters in the query string:
 
 | Param | Type | Description | Example |
 | :-- | :-- | :-- | :-- |
-| `queryId`                     | integer or UUID (**required**, forbidden if `queryName` is used)  | ID of the query to run. | `queryId=61b338b0-cc66-4c4b-a3f9-41020895c574` |
+| `queryId`                     | integer, short UUID or UUID (**required**, forbidden if `queryName` is used)  | ID of the query to run. | `queryId=61b338b0` |
 | `queryName`                   | string (**required**, forbidden if `queryId` is used)  | Name of the query to run. | `queryName=getTransactions` |
 | `sourceKey`                   | string (**required**)   | Key of the data-source to run the query on. | `sourceKey=b16e9ed5` |
 | `limit`                       | integer (**optional**)  | Maximum number of results to display. | `limit=500` |
@@ -52,10 +52,10 @@ This plugin supports the following URL parameters in the query string:
 In order to display the result of a standard query in a table:
 
 1. Create a standard READ query. For example: `MATCH (n) return n LIMIT 1000`.
-2. Note down the newly-created query ID, it will by the value of `queryId`. For example: `queryId=61b338b0-cc66-4c4b-a3f9-41020895c574`.
+2. Note down the newly-created query ID, it will by the value of `queryId`. For example: `queryId=61b338b0`.
 3. Compose a valid data-table plugin URL and open it in a new tab. For example:
 ```
-{{baseUrl}}plugins/table?queryId=61b338b0-cc66-4c4b-a3f9-41020895c574&sourceKey={{sourceKey}}
+{{baseUrl}}plugins/table?queryId=61b338b0&sourceKey={{sourceKey}}
 ```
 You can save this URL as a [Custom Action](https://doc.linkurio.us/user-manual/latest/custom-actions/), and when triggered, the `{{baseUrl}}` and `{{sourceKey}}` will be replaced with your LKE base URL and your current data-source key, respectively, and the final URL will be opened in a new tab. You can always do it manually, if you want.
 
@@ -64,11 +64,11 @@ You can save this URL as a [Custom Action](https://doc.linkurio.us/user-manual/l
 In order to display the result of a query template in a table:
 
 1. Create a READ query template. For example: `MATCH (n) where n.city={{"City Name":string}} return n LIMIT 1000`.
-2. Note down the newly-created query ID, it will by the value of `queryId`. For example: `queryId=bf450812-5ce6-4efc-a867-2ee9f7b171e1`.
+2. Note down the newly-created query ID, it will by the value of `queryId`. For example: `queryId=bf450812`.
 2. Note down each field title, [URL encode it](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent), prepend it with a valid URL parameter and give it a value. For example: `param_string_City%20Name=Paris`.
 3. Compose a valid data-table plugin URL and open it in a new tab. For example:
 ```
-{{baseUrl}}plugins/table?queryId=bf450812-5ce6-4efc-a867-2ee9f7b171e1&sourceKey={{sourceKey}}&param_string_City%20Name=Paris
+{{baseUrl}}plugins/table?queryId=bf450812&sourceKey={{sourceKey}}&param_string_City%20Name=Paris
 ```
 You can save this URL as a [Custom Action](https://doc.linkurio.us/user-manual/latest/custom-actions/), and when triggered, the `{{baseUrl}}` and `{{sourceKey}}` will be replaced with your LKE base URL and your current data-source key, respectively, and the final URL will be opened in a new tab. You can always do it manually if you want.
 
