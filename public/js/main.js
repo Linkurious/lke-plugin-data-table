@@ -199,8 +199,8 @@ function validateGlobalQueryParams(params) {
         return handleError({body: {message: 'Missing URL parameter: a “queryId” (number) or a “queryName” (string) is mandatory'}});
     } else if (params.queryId !== undefined && params.queryName !== undefined) {
         return handleError({body: {message: 'Only one query parameter is allowed: impossible to use “queryId” and “queryName” at the same moment'}});
-    } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId) && !isUuid(params.queryId)) {
-        return handleError({body: {message: 'URL parameter “queryId” must be an integer or a UUID'}});
+    } else if (params.queryId !== undefined && !Number.isInteger(+params.queryId) && !isUuid(params.queryId) && !isShortUuid(params.queryId)) {
+        return handleError({body: {message: 'URL parameter “queryId” must be an integer, a UUID or a short UUID'}});
     } else if (params.sourceKey === undefined) {
         return handleError({body: {message: 'Missing URL parameter “sourceKey” (must be a string)'}});
     }
@@ -215,6 +215,17 @@ function isUuid(value) {
     return false;
   }
   return value === '00000000-0000-0000-0000-000000000000' || /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
+
+/**
+ * Return true if the supplied value is a short UUID, which corresponds to the leftmost eight
+ * hexadecimal characters of a regular UUID.
+ */
+function isShortUuid(value) {
+  if (typeof value !== 'string') {
+    return false;
+  }
+  return /^[0-9a-f]{8}$/i.test(value);
 }
 
 /**
