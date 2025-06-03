@@ -124,10 +124,10 @@ module.exports = function configureRoutes(options) {
       sourceKey: req.body.queryParams.global.sourceKey,
       limit: +req.body.queryParams.global.limit
     };
-    if (req.body.query.templateFields) {
-      data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields, req.body.query.templateFields);
-    }
     try {
+      if (req.body.query.templateFields) {
+        data.templateData = sanitizeTemplateData(req.body.queryParams.templateFields, req.body.query.templateFields);
+      }
       const queryResult = await options.getRestClient(req).graphQuery.runQueryById(data);
       res.status(200);
       res.contentType('application/json');
@@ -135,7 +135,7 @@ module.exports = function configureRoutes(options) {
     } catch (e) {
       res.status(400);
       res.contentType('application/json');
-      const error = e.originalResponse.body ? e.originalResponse.body : e;
+      const error = (e.originalResponse && e.originalResponse.body) ? e.originalResponse.body : e;
       res.send(JSON.stringify({status: 400, body: {error}}));
     }
 
