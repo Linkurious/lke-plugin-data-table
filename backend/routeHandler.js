@@ -135,7 +135,7 @@ module.exports = function configureRoutes(options) {
     } catch (e) {
       res.status(400);
       res.contentType('application/json');
-      const error = (e.originalResponse && e.originalResponse.body) ? e.originalResponse.body : e;
+      const error = e.originalResponse?.body ? e.originalResponse.body : e;
       res.send(JSON.stringify({status: 400, body: {error}}));
     }
 
