@@ -28,7 +28,7 @@
   },
   "license": "Apache 2",
   "files": [
-    "manifest.json",
+    "manifest*.json",
     "public",
     "backend"
   ],
