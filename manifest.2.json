@@ -9,9 +9,17 @@
       "title": "Table de données",
       "description": "Affichez les résultats des requêtes de graphe sous forme de tableau."
     },
+    "it": {
+      "title": "Tabella dati",
+      "description": "Visualizza i risultati delle query del grafo in forma tabellare."
+    },
     "ja": {
       "title": "データテーブル",
       "description": "グラフクエリの結果をテーブル形式で表示します。"
+    },
+    "es": {
+      "title": "Tabla de datos",
+      "description": "Muestra los resultados de las consultas del grafo en forma de tabla."
     }
   }
 }
