@@ -20,6 +20,14 @@
     "es": {
       "title": "Tabla de datos",
       "description": "Muestra los resultados de las consultas del grafo en forma de tabla."
+    },
+    "ar": {
+      "title": "جدول البيانات",
+      "description": "عرض نتائج استعلام الرسم البياني كجدول."
+    },
+    "de": {
+      "title": "Datentabelle",
+      "description": "Ergebnisse von Graph-Abfragen als Tabelle anzeigen."
     }
   }
 }
